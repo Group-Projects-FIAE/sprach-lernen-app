@@ -1,6 +1,12 @@
 from django.db import models
 from django.conf import settings
 
+class Language(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.name
+
 class LanguageLevel(models.Model):
     code = models.CharField(max_length=5, unique=True)
     description = models.TextField()
@@ -11,6 +17,7 @@ class LanguageLevel(models.Model):
 class VocabularyList(models.Model):
     name = models.CharField(max_length=100)
     level = models.ForeignKey(LanguageLevel, on_delete=models.CASCADE)
+    language = models.ForeignKey(Language, on_delete=models.CASCADE, null=True, blank=True)
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
     is_system = models.BooleanField(default=True)
 
