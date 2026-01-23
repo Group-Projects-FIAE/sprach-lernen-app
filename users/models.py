@@ -1,3 +1,13 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from vocab.models import LanguageLevel
 
-# Create your models here.
+class User(AbstractUser):
+    profile = models.ImageField(upload_to='profiles/', blank=True, null=True)
+    level =models.ForeignKey('vocab.LanguageLevel', on_delete=models.SET_NULL, blank=True, null=True)
+    daily_target = models.PositiveIntegerField(default=10)
+    progress = models.FloatField(default=0)
+    custom_list = models.ManyToManyField('vocab.VocabularyList', blank=True)
+
+    def __str__(self):
+        return f"{self.username} ({self.level})"
