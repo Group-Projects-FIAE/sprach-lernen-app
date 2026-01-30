@@ -1,0 +1,39 @@
+{
+  "metadata": {
+    "title": "Top 1000 German Words with Examples",
+    "description": "Complete vocabulary list with CEFR levels (A1-C2), articles, plurals and example sentences",
+    "version": "1.0",
+    "created": "2023-11-15"
+  },
+  "words": [
+    {
+      "id": 1,
+      "word": "der Mann",
+      "details": {
+        "type": "noun",
+        "gender": "masculine",
+        "plural": "die Männer",
+        "level": "A1"
+      },
+      "translation": "man",
+      "example": "Der Mann liest eine Zeitung.",
+      "example_translation": "The man is reading a newspaper."
+    },
+    {
+      "id": 2,
+      "word": "haben",
+      "details": {
+        "type": "verb",
+        "level": "A1",
+        "conjugations": {
+          "present": ["habe", "hast", "hat", "haben", "habt", "haben"],
+          "preterite": "hatte",
+          "perfect": "gehabt"
+        }
+      },
+      "translation": "to have",
+      "example": "Ich habe einen Hund.",
+      "example_translation": "I have a dog."
+    }
+  ]
+}

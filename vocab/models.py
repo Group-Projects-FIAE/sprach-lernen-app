@@ -28,9 +28,13 @@ class Word(models.Model):
     word = models.CharField(max_length=100)
     translation = models.CharField(max_length=200)
     vocab_list = models.ForeignKey(VocabularyList, on_delete=models.CASCADE, related_name='words')
+    word_type = models.CharField(max_length=50, blank=True, null=True)
+    example = models.TextField(blank=True, null=True)
+    example_translation = models.TextField(blank=True, null=True)
+    metadata = models.JSONField(default=dict, blank=True)
 
     def __str__(self):
-        return self.word
+        return f"{self.word} ({self.translation})"
 
 class Progress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
