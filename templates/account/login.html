@@ -1,0 +1,21 @@
+{% load socialaccount %}
+{% get_providers as socialaccount_providers %}
+
+<form method="post" action="{% url 'account_login' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Login</button>
+</form>
+
+<hr>
+
+<h3>Or login with:</h3>
+<ul>
+  {% for provider in socialaccount_providers %}
+    <li>
+      <a href="{% provider_login_url provider.id %}">{{ provider.name }}</a>
+    </li>
+  {% empty %}
+    <li>No social providers configured.</li>
+  {% endfor %}
+</ul>
