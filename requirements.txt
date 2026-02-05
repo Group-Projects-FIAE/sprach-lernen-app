@@ -2,3 +2,7 @@ asgiref==3.11.0
 Django==6.0
 django-allauth
 sqlparse==0.5.4
+PyJWT
+requests
+cryptography
+django-allauth
