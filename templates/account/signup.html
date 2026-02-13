@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% load socialaccount %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="container">
+    
+                <form class="register-form" method="post" action="{% url 'account_signup' %}">
+                    {% csrf_token %}
+                    <h1>Sign Up</h1>
+        
+                    {% if form.errors %}
+                    <p style="color:red;">Please correct the errors below</p>
+                    <ul>
+                        {% for field, errors in form.errors.items %}
+                            <li>{{ field }}: {{ errors|join:", " }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+                
+        
+                    <div class="form-group">
+                        <label for="id_first_name">Name</label>
+                        <input type="text" name="first_name" id="id_first_name" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="id_last_name">Surname</label>
+                        <input type="text" name="last_name" id="id_last_name" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="id_email">Email</label>
+                        <input type="email" name="email" id="id_email" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="id_password1">Password</label>
+                        <input type="password" name="password1" id="id_password1" required>
+                    </div>
+        
+                    <div class="form-group">
+                        <label for="id_password2">Repeat Password</label>
+                        <input type="password" name="password2" id="id_password2" required>
+                    </div>
+        
+                    <div class="buttons">
+                        <button type="submit" class="btn btn-save">Sign Up</button>
+                        <button type="button" class="btn btn-cancel" onclick="window.history.back()">Cancel</button>
+                    </div>
+                </form>
+              
+{% endblock %}
