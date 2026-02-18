@@ -15,7 +15,7 @@
 </head>
 <body>
     {% block navbar %}
-    <nav class="navbar navbar-light bg-white shadow-sm mb-2">
+    <nav class="navbar bg-white mb-2">
         <div class="container">
             <a class="navbar-brand" href="/">
                 <img src="{% static 'logo.png' %}" alt="Elerno logo" style="height: 60px;">
@@ -25,15 +25,21 @@
     {% endblock %}
 
 
-    
-    <main class=" d-flex justify-content-start py-5">
-        <div class=" text-center">
-        {% block sidebar %}Sidebar{% endblock %}
-        </div>
+
+    <main class="d-flex justify-content-center py-5">
+        {%if user.is_authenticated %}
+            <div class="sidebar d-flex align-items-center">
+                {% include 'menu.html' %}
+            </div>
+        {% endif %}
         <div class="container">
             {% block content %}{% endblock %}
         </div>
     </main>
+
+
+
+
     
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     {% block extra_js %}{% endblock %}

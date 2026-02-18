@@ -38,23 +38,17 @@
     <h2 >Started lists</h2>
     <h3 >Choose a list to learn</h3>
     <div class="lists-grid">
-        <div class="list-card">
-            <h2>Basic b2</h2>
-            <h3>10/20</h3>
-            <div class="progress-bar">
-            </div><a href="lists/basic_b1" class="btn-start">Start</a>
-        </div>
-        <!--{% for list in started_lists %}
+        {% for list in started_lists %}
         <div class="list-card">
             <h3>{{ list.name }}</h3>
-            <p>{{ list.progress }}% abgeschlossen</p>
+            <p>{{ list.progress }}% </p>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: {{ list.progress }}%;"></div>
-            </div><a href="{% url 'start_list' list.id %}" class="btn-start">Starten</a>
+            </div><a href="{% url 'start_list' list.id %}" class="btn-start">Start</a>
         </div>
         {% empty %}
         <p>Keine Listen gestartet.</p>
-        {% endfor %}-->
+        {% endfor %}
     </div>
 </div>
 

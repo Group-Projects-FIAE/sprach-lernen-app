@@ -29,7 +29,28 @@
             font-size: 18px;
             font-weight: light;
         }}
+        .sidebar {
+        width: 250px;
+        box-shadow: 2px 0px 14px rgba(37, 117, 167, 0.1);
+    }
 
+    .sidebar-btn{
+        text-decoration: none;
+        display: inline-block;
+        color: black;
+        padding: 10px 45px;
+        border-radius: 10px;
+        margin-top: 10px;
+        width: 200px
+        height: 40px;
+        border: 2px solid white;
+    }
+
+    .sidebar-btn:hover {
+        background: #EAF4FA;
+        border: 2px solid  rgba(37, 117, 167, 0.1);
+
+    }
         .navbar-icon {
             width: 20px;
             height: 20px;
@@ -117,6 +138,8 @@
             background-color: #d0e7f4;
         }
 
+
+
         .dashboard-container {
             max-width: 1200px;
 
@@ -176,8 +199,8 @@
 
         .stat-label {
             margin-top: 10px;
-            font-size: 14px;
-            color: #666;
+
+
         }
 
         .lists-grid {
