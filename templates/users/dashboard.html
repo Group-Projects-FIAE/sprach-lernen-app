@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Sprach Lernen{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center">
+        <div class="card shadow-sm border-0 p-5">
+            <h1 class="display-4 mb-4">Welcome, {{ user.first_name|default:user.username }}!</h1>
+            <p class="lead text-muted mb-4">
+                We're glad to see you again. Ready for some language learning today?
+            </p>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                <a href="/" class="btn btn-primary btn-lg px-4">Start Learning</a>
+                <a href="{% url 'account_logout' %}" class="btn btn-outline-secondary btn-lg px-4">Logout</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
