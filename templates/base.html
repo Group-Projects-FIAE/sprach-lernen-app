@@ -15,26 +15,22 @@
 </head>
 <body>
     {% block navbar %}
-    <nav class="navbar bg-white mb-2">
-        <div class="container">
+    <nav class="navbar shadow-sm mb-2">
+        <div class="container d-flex justify-content-between">
             <a class="navbar-brand" href="/">
                 <img src="{% static 'logo.png' %}" alt="Elerno logo" style="height: 60px;">
             </a>
+            <div class="d-flex flex-row">
+                <div class="p-2"><a class="navbar-btn" href="lists/lists.html">Lists</a></div>
+                <div class="p-2"><a class="navbar-btn" href="account/profile.html">Profile</a></div>
+                <div class="p-2"><a class="navbar-btn" href="account/logout.html">Loogout</a></div>
+            </div>
         </div>
     </nav>
     {% endblock %}
 
-
-
     <main class="d-flex justify-content-center py-5">
-        {%if user.is_authenticated %}
-            <div class="sidebar d-flex align-items-center">
-                {% include 'menu.html' %}
-            </div>
-        {% endif %}
-        <div class="container">
-            {% block content %}{% endblock %}
-        </div>
+        {% block content %}{% endblock %}
     </main>
 
 

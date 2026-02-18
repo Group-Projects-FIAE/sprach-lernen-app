@@ -5,8 +5,8 @@
 
 {% block content %}
 
-            <div class="container">
-                <form class="register-form" method="post" action="{% url 'account_login' %}">
+<div class="login-container">
+    <form class="register-form" method="post" action="{% url 'account_login' %}">
                     {% csrf_token %}
                     <h1>Login</h1>
                 
