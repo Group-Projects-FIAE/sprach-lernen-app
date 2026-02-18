@@ -77,14 +77,17 @@ class CreateListView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         form.instance.is_system = False
-        response = super().form_valid(form)
+        
+        # Save the list first
+        self.object = form.save()
         
         # Copy words if provided
         word_ids = self.request.POST.getlist('words')
         if word_ids:
             original_words = Word.objects.filter(pk__in=word_ids)
+            words_to_create = []
             for w in original_words:
-                Word.objects.create(
+                words_to_create.append(Word(
                     word=w.word,
                     translation=w.translation,
                     vocab_list=self.object,
@@ -92,9 +95,13 @@ class CreateListView(LoginRequiredMixin, CreateView):
                     example=w.example,
                     example_translation=w.example_translation,
                     metadata=w.metadata,
-                )
-            messages.success(self.request, f'List "{self.object.name}" created with {original_words.count()} words.')
-        return response
+                ))
+            Word.objects.bulk_create(words_to_create)
+            messages.success(self.request, f'List "{self.object.name}" created with {len(words_to_create)} words.')
+        else:
+            messages.success(self.request, f'List "{self.object.name}" created.')
+            
+        return HttpResponseRedirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('list_detail', kwargs={'pk': self.object.pk})
