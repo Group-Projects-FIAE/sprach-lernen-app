@@ -2,7 +2,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: Arial, sans-serif;
+            font-family: Josefine Sans, sans-serif;
         }
 
         body {
@@ -14,6 +14,21 @@
             display: flex;
             align-items: center;
         }
+
+        h1{
+            font-size: 36px;
+            font-weight: bold;
+        }
+
+        h2{
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        h3{
+            font-size: 18px;
+            font-weight: light;
+        }}
 
         .navbar-icon {
             width: 20px;
@@ -27,9 +42,9 @@
         }
 
         .container {
-            display: flex;
+            display: flex-start;
             justify-content: center;
-            align-items: center;
+            align-items: left;
         }
 
         .register-form {
@@ -60,7 +75,7 @@
             padding: 10px;
             border: 2px solid #EAF4FA;
             border-radius: 10px;
-            font-size: 14px;
+            font-size: 16px;
         }
 
         .buttons {
@@ -88,6 +103,7 @@
 
         .btn-save:hover {
             background-color: #1e5d85;
+            color: white;
         }
 
         .btn-cancel {
@@ -99,4 +115,114 @@
 
         .btn-cancel:hover {
             background-color: #d0e7f4;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+
+        }
+
+        .stats-section {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 0px 100px 0px 100px;
+        }
+
+        .circle-stat {
+            position: relative;
+            min-width: 200px;
+            min-height: 200px;
+        }
+
+        .circle-stat svg {
+            transform: rotate(-90deg);
+        }
+
+        .circle-stat circle {
+            fill: none;
+            stroke-width: 25;
+        }
+
+        .circle-stat .bg {
+            stroke: #EAF4FA;
+        }
+
+        .circle-stat .progress {
+            stroke: #4CAF50;
+            stroke-dasharray: 283;
+            stroke-linecap: round;
+            transition: stroke-dashoffset 0.5s;
+        }
+
+        .circle-stat .progress.lists {
+            stroke: #2196F3;
+        }
+
+        .stat-number {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 32px;
+            font-weight: bold;
+        }
+
+        .stat-label {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .lists-grid {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 40px;
+        }
+
+        .list-card {
+            background: #fff;
+            border-radius: 10px;
+            padding: 20px 40px;
+            border: 2px solid #EAF4FA;
+        }
+
+        .list-card:hover{
+            border: 2px solid #2575A7;
+        }
+
+        .progress-bar {
+            background: #EAF4FA;
+            border-radius: 10px;
+            height: 10px;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            background: #39A725;
+            height: 100%;
+            border-radius: 10px;
+        }
+
+        .btn-start {
+            display: inline-block;
+            background: #2575A7;
+            color: white;
+            padding: 10px 45px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+            width: 200px
+            height: 40px;
+        }
+
+        .btn-start:hover {
+            box-shadow: 0px 4px 8px #D9D9D9;
         }
