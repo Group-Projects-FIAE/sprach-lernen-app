@@ -20,11 +20,19 @@
             <a class="navbar-brand" href="/">
                 <img src="{% static 'logo.png' %}" alt="Elerno logo" style="height: 60px;">
             </a>
+            <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
+            {% if 0 %}
             <div class="d-flex flex-row">
                 <div class="p-2"><a class="navbar-btn" href="lists/lists.html">Lists</a></div>
                 <div class="p-2"><a class="navbar-btn" href="account/profile.html">Profile</a></div>
-                <div class="p-2"><a class="navbar-btn" href="account/logout.html">Loogout</a></div>
+                <div class="p-2"><a class="navbar-btn" href="account/logout.html">Logout</a></div>
             </div>
+            {% else %}
+            <div class="d-flex flex-row">
+                <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>
+                <div class="p-2"><a class="navbar-btn" href="account/signup.html">Sign up</a></div>
+            </div>
+            {% endif %}
         </div>
     </nav>
     {% endblock %}
