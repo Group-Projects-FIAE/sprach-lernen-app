@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}Vocabulary - Sprach Lernen{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">Vocabulary</h1>
+</div>
+
+<!-- Level Filter -->
+<div class="mb-4">
+    <div class="d-flex gap-2">
+        <a href="{% url 'vocabulary' %}"
+            class="btn btn-outline-primary btn-sm {% if not current_level %}active{% endif %}">All</a>
+        {% for lvl in levels %}
+        <a href="{% url 'vocabulary' %}?level={{ lvl.code }}"
+            class="btn btn-outline-primary btn-sm {% if current_level == lvl.code %}active{% endif %}">
+            {{ lvl.code }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<div class="card border-0 shadow-sm overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="bg-light text-muted small text-uppercase">
+                <tr>
+                    <th class="ps-4">Word</th>
+                    <th>Translation</th>
+                    <th>Type</th>
+                    <th>Level</th>
+                    <th class="pe-4">List</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for word in words %}
+                <tr>
+                    <td class="ps-4"><strong>{{ word.word }}</strong></td>
+                    <td>{{ word.translation }}</td>
+                    <td><span class="badge bg-light text-muted fw-normal">{{ word.word_type|default:"-" }}</span></td>
+                    <td><span class="badge bg-light text-primary">{{ word.vocab_list.level.code }}</span></td>
+                    <td class="pe-4">{{ word.vocab_list.name }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5" class="text-center py-5 text-muted">No vocabulary found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% if words.has_other_pages %}
+<nav class="mt-4" aria-label="Page navigation">
+    <ul class="pagination justify-content-center">
+        {% if words.has_previous %}
+        <li class="page-item">
+            <a class="page-link"
+                href="?{% if current_level %}level={{ current_level }}&{% endif %}page={{ words.previous_page_number }}"
+                aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        {% endif %}
+
+        <li class="page-item disabled">
+            <span class="page-link">Page {{ words.number }} of {{ words.paginator.num_pages }}</span>
+        </li>
+
+        {% if words.has_next %}
+        <li class="page-item">
+            <a class="page-link"
+                href="?{% if current_level %}level={{ current_level }}&{% endif %}page={{ words.next_page_number }}"
+                aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+{% endif %}
+{% endblock %}
