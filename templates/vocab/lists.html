@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}Vocabulary Lists - Sprach Lernen{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h2 mb-0">Vocabulary Lists</h1>
+    <a href="{% url 'create_list' %}" class="btn btn-primary">
+        <i class="fas fa-plus me-2"></i> Create List
+    </a>
+</div>
+
+<!-- Level Filter -->
+<div class="mb-5">
+    <div class="d-flex gap-2">
+        <a href="{% url 'vocab_lists' %}" class="btn btn-outline {% if not current_level %}active{% endif %}">All</a>
+        {% for level in levels %}
+        <a href="?level={{ level.code }}" class="btn btn-outline {% if current_level == level.code %}active{% endif %}">
+            {{ level.code }}
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<section class="mb-5">
+    <h2 class="h4 mb-4">System Suggestions</h2>
+    <div class="card-grid">
+        {% for list in system_lists %}
+        <div class="vocab-card">
+            <div class="card-header">
+                <h3 class="h5 mb-0">{{ list.name }}</h3>
+                <span class="badge bg-light text-primary">{{ list.level.code }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="progress-circle" style="--p: 20%;">
+                    <span class="progress-value">12/200</span> <!-- Dummy progress for now -->
+                </div>
+                <span class="text-muted small">learned this month</span>
+            </div>
+            <a href="{% url 'list_detail' list.pk %}" class="btn btn-primary btn-full">Start</a>
+        </div>
+        {% empty %}
+        <p class="text-muted">No system lists available for this level.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section>
+    <h2 class="h4 mb-4">Your Lists</h2>
+    <div class="card-grid">
+        {% for list in custom_lists %}
+        <div class="vocab-card">
+            <div class="card-header">
+                <h3 class="h5 mb-0">{{ list.name }}</h3>
+                <span class="badge bg-light text-primary">{{ list.level.code }}</span>
+            </div>
+            <div class="d-flex align-items-center gap-3 mb-4">
+                <div class="progress-circle" style="--p: 0%;">
+                    <span class="progress-value">0/{{ list.words.count }}</span>
+                </div>
+                <span class="text-muted small">not started</span>
+            </div>
+            <a href="{% url 'list_detail' list.pk %}" class="btn btn-primary btn-full">Start</a>
+        </div>
+        {% empty %}
+        <div class="text-center py-5 bg-white rounded-3 border border-dashed">
+            <p class="text-muted mb-3">You haven't created any custom lists yet.</p>
+            <a href="{% url 'create_list' %}" class="btn btn-outline">Create your first list</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
