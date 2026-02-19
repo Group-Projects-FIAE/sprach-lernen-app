@@ -15,7 +15,8 @@
                             style="stroke-dashoffset: calc(283 - (283 * {{ words_today|default:0 }}) / {{ words_goal|default:100 }});">
                     </circle>
                 </svg>
-                <div class="stat-number">{{ words_today|default:5 }}</div>
+                <!-- Logic for progress: words learned today -->
+                <div class="stat-number">{{ words_today|default:0 }}</div>
             </div>
             <h3 class="stat-label">Learned today</h3>
         </div>
@@ -28,6 +29,7 @@
                             style="stroke-dashoffset: calc(283 - (283 * {{ lists_learned|default:0 }}) / {{ lists_total|default:10 }});">
                     </circle>
                 </svg>
+                <!-- Logic for progress: for lists already learned -->
                 <div class="stat-number">{{ lists_learned|default:0 }}</div>
             </div>
             <h3 class="stat-label">Learned lists</h3>
@@ -38,6 +40,7 @@
     <h2 >Started lists</h2>
     <h3 >Choose a list to learn</h3>
     <div class="lists-grid">
+        <!-- Logic for lists that has been started, from db. Adapt the code according to the db -->
         {% for list in started_lists %}
         <div class="list-card">
             <h3>{{ list.name }}</h3>

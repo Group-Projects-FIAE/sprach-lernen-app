@@ -29,23 +29,22 @@
             font-size: 18px;
             font-weight: light;
         }
-    .navbar-btn{
-        text-decoration: none;
-        display: inline-block;
-        color: black;
-        padding: 10px 45px;
-        border-radius: 10px;
-        margin-top: 10px;
-        width: 200px
-        height: 40px;
-        border: 2px solid white;
-    }
+        .navbar-btn{
+            text-decoration: none;
+            color: black;
+            padding: 10px 45px;
+            border-radius: 10px;
+            margin-top: 10px;
+            width: 200px
+            height: 40px;
+            border: 2px solid white;
+        }
 
-    .navbar-btn:hover {
-        background: #EAF4FA;
-        border: 2px solid  rgba(37, 117, 167, 0.1);
+        .navbar-btn:hover {
+            background: #EAF4FA;
+            border: 2px solid  rgba(37, 117, 167, 0.1);
 
-    }
+        }
         .navbar-icon {
             width: 20px;
             height: 20px;
