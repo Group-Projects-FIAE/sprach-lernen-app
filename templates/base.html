@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     {% block extra_css %}
-    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="{% static 'static/style.css' %}">
     {% endblock %}
 </head>
 <body>
@@ -19,35 +19,53 @@
     <nav class="navbar shadow-sm mb-2">
         <div class="container d-flex justify-content-between">
             <a class="navbar-brand" href="/">
-                <img src="{% static 'logo.png' %}" alt="Elerno logo" style="height: 60px;">
+                <img src="{% static 'static/img/logo.png' %}" alt="Elerno logo" style="height: 60px;">
             </a>
-            <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
-            {% if 1 %}
-            <div class="d-flex justify-content-end">
-                <div class="dropdown p-2">
-                    <!--correct link to the lists view-->
-                  <a class="navbar-btn dropdown-toggle" href="lists/lists.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    Lists
-                  </a>
-                    <!--generate dropdown items from existing in the db lists-->
-                  <ul class="dropdown-menu">
-                      <!--correct link to the list-->
-                    <li><a class="dropdown-item" href="lists/basic_b1">Basic B1</a></li>
-                  </ul>
+            <div class="d-flex flex-row align-items-center">
+                <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
+                {% if 1 %}
+                    <div class="dropdown p-2">
+                        <!--correct link to the lists view-->
+                      <a class="navbar-btn dropdown-toggle" href="lists/lists.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Lists
+                      </a>
+                        <!--generate dropdown items from existing in the db lists-->
+                      <ul class="dropdown-menu">
+                          <!--correct link to the list-->
+                        <li><a class="dropdown-item" href="lists/basic_b1">Basic B1</a></li>
+                      </ul>
+                    </div>
+                    <!--correct link to the profile view-->
+                    <div class="p-2"><a class="navbar-btn" href="account/profile.html">Profile</a></div>
+                    <!--correct link to the logout view-->
+                    <div class="p-2"><a class="navbar-btn" href="account/logout.html">Logout</a></div>
+                {% else %}
+                    <!--correct link to the login view-->
+                    <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>
+                    <!--correct link to the signup view-->
+                    <div class="p-2"><a class="navbar-btn" href="account/signup.html">Sign up</a></div>
+                {% endif %}
+                    <!--add the logic to switch languages around-->
+                    <div class="dropdown">
+                        <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{% static 'static/img/us.png' %}" alt="English" width="20" height="15" class="me-1">
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="?lang=en">
+                                    <img src="{% static 'static/img/us.png' %}" alt="English" width="20" height="15" class="me-2">
+                                    English
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item d-flex align-items-center" href="?lang=de">
+                                    <img src="{% static 'static/img/de.png' %}" alt="Deutsch" width="20" height="15" class="me-2">
+                                    Deutsch
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-                <!--correct link to the profile view-->
-                <div class="p-2"><a class="navbar-btn" href="account/profile.html">Profile</a></div>
-                <!--correct link to the logout view-->
-                <div class="p-2"><a class="navbar-btn" href="account/logout.html">Logout</a></div>
-            </div>
-            {% else %}
-            <div class="d-flex flex-row">
-                <!--correct link to the login view-->
-                <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>
-                <!--correct link to the signup view-->
-                <div class="p-2"><a class="navbar-btn" href="account/signup.html">Sign up</a></div>
-            </div>
-            {% endif %}
         </div>
     </nav>
     {% endblock %}
