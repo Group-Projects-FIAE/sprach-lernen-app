@@ -23,6 +23,6 @@ urlpatterns = [
 
     path('accounts/', include('allauth.urls')), 
     path('', views.dashboard, name="dashboard"),
-
+    path('lists/', views.lists, name="lists"),
 
 ]

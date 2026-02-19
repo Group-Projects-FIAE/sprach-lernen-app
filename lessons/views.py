@@ -13,3 +13,6 @@ def dashboard(request):
         ]
     }
     return render(request, "dashboard/dashboard.html")
+
+def lists(request):
+    return render(request, "lists/lists.html")

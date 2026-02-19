@@ -37,10 +37,10 @@
     </div>
 
     <!-- Gestartete Listen -->
-    <h2 >Started lists</h2>
+    <h2 >Available lists</h2>
     <h3 >Choose a list to learn</h3>
     <div class="lists-grid">
-        <!-- Logic for lists that has been started, from db. Adapt the code according to the db -->
+        <!-- Logic for available lists, from db. Adapt the code according to the db -->
         {% for list in started_lists %}
         <div class="list-card">
             <h3>{{ list.name }}</h3>

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <h1>Lists</h1>
+    <p>Here you can find all the lists available for learning. Click on a list to start learning the words in it.</p>
+
+    <div class="lists-grid">
+        <!-- Logic to display lists from the database -->
+        {% for list in lists %}
+        <div class="list-card">
+            <h3>{{ list.name }}</h3>
+            <p>{{ list.description }}</p>
+            <a href="{% url 'start_list' list.id %}" class="btn-start">Start Learning</a>
+        </div>
+        {% empty %}
+        <p>No lists available at the moment. Please check back later.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
