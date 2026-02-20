@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}{{ vocab_list.name }} - Sprach Lernen{% endblock %}
+
+{% block content %}
+<div class="mb-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'vocab_lists' %}">Vocabulary</a></li>
+            <li class="breadcrumb-item active">{{ vocab_list.name }}</li>
+        </ol>
+    </nav>
+    <h1 class="h2">{{ vocab_list.name }} <span class="badge bg-light text-primary ms-2">{{ vocab_list.level.code
+            }}</span></h1>
+</div>
+
+<div class="row mb-5">
+    <div class="col-md-4">
+        <div class="card shadow-sm border-0 p-4 text-center">
+            <div class="progress-circle mx-auto mb-3" style="--p: {{ learned_count|default:0|add:0 }}%;">
+                <span class="progress-value">{{ learned_count }}/{{ total_words }}</span>
+            </div>
+            <p class="text-muted mb-0">learned</p>
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="card shadow-sm border-0 p-4 h-100 d-flex flex-row align-items-center justify-content-between">
+            <div>
+                <h3 class="h5 mb-1">Ready to practice?</h3>
+                <p class="text-muted mb-0">Master these {{ total_words }} words through active recall.</p>
+            </div>
+            <div class="d-flex gap-2">
+                <form action="{% url 'set_active_list' vocab_list.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary">Set as Active</button>
+                </form>
+                {% if not vocab_list.is_system %}
+                <button type="button" class="btn btn-outline text-danger" data-bs-toggle="modal"
+                    data-bs-target="#deleteModal">
+                    <i class="fas fa-trash"></i>
+                </button>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<h2 class="h4 mb-4">Wörter</h2>
+<div class="bg-white rounded-3 shadow-sm overflow-hidden">
+    <table class="table table-hover mb-0">
+        <thead class="bg-light">
+            <tr>
+                <th class="ps-4">Word</th>
+                <th>Translation</th>
+                <th>Type</th>
+                <th>Progress</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for word in words %}
+            <tr>
+                <td class="ps-4 fw-bold text-primary">{{ word.word }}</td>
+                <td>{{ word.translation }}</td>
+                <td><span class="badge bg-light text-muted fw-normal">{{ word.word_type }}</span></td>
+                <td>
+                    <div class="progress" style="height: 6px; width: 100px;">
+                        <div class="progress-bar" role="progressbar"
+                            style="width: calc({{ word.progress_count|default:0 }} * 20%)"></div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<!-- Delete Modal -->
+{% if not vocab_list.is_system %}
+<div class="modal fade" id="deleteModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content border-0">
+            <div class="modal-header">
+                <h5 class="modal-title">Delete List</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to delete "{{ vocab_list.name }}"? This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline" data-bs-dismiss="modal">Cancel</button>
+                <form action="{% url 'delete_list' vocab_list.pk %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-primary bg-danger border-0">Delete</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
