@@ -2,6 +2,12 @@
 Context processor so social account providers are always available in templates.
 Fixes "no providers" when get_providers tag doesn't see the right site/request.
 """
+import time
+
+
+def cache_buster(request):
+    """Add timestamp for CSS cache busting during development"""
+    return {"now": int(time.time())}
 
 
 def socialaccount_providers(request):
