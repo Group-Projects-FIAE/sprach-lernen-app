@@ -1,15 +1,19 @@
 from django.shortcuts import render
+from .models import VocabularyList
 
 
 def dashboard(request):
+    user = request.user
+    started_lists = VocabularyList.objects.all()
+
+    words_today = user.progress_daily
+    words_goal = user.daily_target
+
     context = {
-        'words_today': 25,
-        'words_goal': 50,
-        'lists_learned': 3,
-        'lists_total': 10,
-        'started_lists': [
-            {'id': 1, 'name': 'Grundwortschatz', 'progress': 60},
-            {'id': 2, 'name': 'Verben', 'progress': 30},
-        ]
+        "started_lists": started_lists,
+        "words_today": words_today,
+        "words_goal": words_goal,
+        "lists_learned": started_lists.count(),
+        "lists_total": VocabularyList.objects.count(),
     }
-    return render(request, "dashboard/dashboard.html")
+    return render(request, "dashboard/dashboard.html", context)

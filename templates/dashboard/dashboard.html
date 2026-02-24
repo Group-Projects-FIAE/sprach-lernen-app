@@ -47,7 +47,7 @@
             <p>{{ list.progress }}% </p>
             <div class="progress-bar">
                 <div class="progress-fill" style="width: {{ list.progress }}%;"></div>
-            </div><a href="{% url 'start_list' list.id %}" class="btn-start">Start</a>
+            </div><a href="{% url 'list_detail' list.id %}" class="btn-start">Start</a>
         </div>
         {% empty %}
         <p>Keine Listen gestartet.</p>
