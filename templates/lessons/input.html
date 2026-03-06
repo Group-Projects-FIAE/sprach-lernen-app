@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lesson - E-lerno{% endblock %}
+
+{% block content %}
+<div class="lesson-container">
+    <!-- Progress bar -->
+    <div class="progress-section">
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: {{ progress }}%;"></div>
+        </div>
+        <span class="progress-text">{{ current_word }}/{{ total_words }}</span>
+    </div>
+
+    <!-- Exercise description -->
+    <div class="exercise-description">
+        <p>Translate the word:</p>
+    </div>
+
+    <!-- Word to translate -->
+    <div class="word-display">
+        <h1>{{ word.german }}</h1>
+    </div>
+
+    <!-- Input form -->
+    <form method="post" class="answer-form">
+        {% csrf_token %}
+        <div class="input-group">
+            <label for="answer-input" class="visually-hidden">Your answer</label>
+            <input type="text"
+                   id="answer-input"
+                   name="answer"
+                   class="answer-input"
+                   placeholder="Your answer..."
+                   autocomplete="off"
+                   autofocus>
+        </div>
+
+        <!-- Feedback message -->
+        {% if feedback %}
+        <div class="feedback {{ feedback_class }}">
+            <p>{{ feedback }}</p>
+            {% if correct_answer %}
+            <p class="correct-answer">Correct answer: {{ correct_answer }}</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Buttons -->
+        <div class="lesson-buttons">
+            <button type="submit" name="action" value="check" class="btn btn-save">
+                Answer
+            </button>
+            <button type="submit" name="action" value="skip" class="btn btn-cancel">
+                Skip
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .lesson-container {
+        max-width: 600px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .progress-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .progress-bar-container {
+        flex: 1;
+        height: 12px;
+        background-color: #EAF4FA;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background-color: #4CAF50;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        font-size: 14px;
+        color: #666;
+        min-width: 50px;
+    }
+
+    .exercise-description {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    .word-display {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: #EAF4FA;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    .word-display h1 {
+        color: #2575A7;
+        margin-bottom: 10px;
+    }
+
+    .word-hint {
+        color: #888;
+        font-style: italic;
+    }
+
+    .answer-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .input-group {
+        width: 100%;
+    }
+
+    .answer-input {
+        width: 100%;
+        padding: 15px 20px;
+        font-size: 18px;
+        border: 2px solid #EAF4FA;
+        border-radius: 20px;
+        text-align: center;
+        transition: border-color 0.3s;
+    }
+
+    .answer-input:focus {
+        outline: none;
+        border-color: #2575A7;
+    }
+
+    .feedback {
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .feedback.correct {
+        background-color: #DBFFDB;
+        color: #2e7d32;
+    }
+
+    .feedback.incorrect {
+        background-color: #FFDCDD;
+        color: #c62828;
+    }
+
+    .correct-answer {
+        font-weight: bold;
+        margin-top: 5px;
+    }
+
+    .lesson-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .lesson-buttons .btn {
+        min-width: 150px;
+        padding: 12px 30px;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}

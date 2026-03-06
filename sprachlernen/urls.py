@@ -24,6 +24,8 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')), 
     path('vocab/', include('vocab.urls')),
     path('', views.dashboard, name="dashboard"),
+    path('lesson/input/', views.lesson_input, name="lesson_input"),
+    path('lesson/select/', views.lesson_select, name="lesson_select"),
 
 
 ]

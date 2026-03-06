@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lesson - E-lerno{% endblock %}
+
+{% block content %}
+<div class="lesson-container">
+    <!-- Progress bar -->
+    <div class="progress-section">
+        <div class="progress-bar-container">
+            <div class="progress-bar-fill" style="width: {{ progress }}%;"></div>
+        </div>
+        <span class="progress-text">{{ current_word }}/{{ total_words }}</span>
+    </div>
+
+    <!-- Exercise description -->
+    <div class="exercise-description">
+        <p>Wähle die richtige Übersetzung:</p>
+    </div>
+
+    <!-- Word to translate -->
+    <div class="word-display">
+        <h1>{{ word.german }}</h1>
+        <p class="word-hint">{{ word.hint }}</p>
+    </div>
+
+    <!-- Selection form -->
+    <form method="post" class="selection-form">
+        {% csrf_token %}
+
+        <!-- Four selection cards -->
+        <div class="cards-grid">
+            {% for option in options %}
+            <label class="selection-card {% if selected == option.id %}selected{% endif %} {% if feedback and option.id == correct_id %}correct{% endif %} {% if feedback and selected == option.id and selected != correct_id %}incorrect{% endif %}">
+                <input type="radio" name="answer" value="{{ option.id }}" {% if selected == option.id %}checked{% endif %}>
+                <span class="card-text">{{ option.text }}</span>
+            </label>
+            {% endfor %}
+        </div>
+
+        <!-- Feedback message -->
+        {% if feedback %}
+        <div class="feedback {{ feedback_class }}">
+            <p>{{ feedback }}</p>
+        </div>
+        {% endif %}
+
+        <!-- Buttons -->
+        <div class="lesson-buttons">
+            <button type="submit" name="action" value="check" class="btn btn-save">
+                Prüfen
+            </button>
+            <button type="submit" name="action" value="skip" class="btn btn-cancel">
+                Überspringen
+            </button>
+        </div>
+    </form>
+</div>
+
+<style>
+    .lesson-container {
+        max-width: 600px;
+        width: 100%;
+        padding: 20px;
+    }
+
+    .progress-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 30px;
+    }
+
+    .progress-bar-container {
+        flex: 1;
+        height: 12px;
+        background-color: #EAF4FA;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .progress-bar-fill {
+        height: 100%;
+        background-color: #4CAF50;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
+    .progress-text {
+        font-size: 14px;
+        color: #666;
+        min-width: 50px;
+    }
+
+    .exercise-description {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #555;
+    }
+
+    .word-display {
+        text-align: center;
+        padding: 40px 20px;
+        background-color: #EAF4FA;
+        border-radius: 15px;
+        margin-bottom: 30px;
+    }
+
+    .word-display h1 {
+        color: #2575A7;
+        margin-bottom: 10px;
+    }
+
+    .word-hint {
+        color: #888;
+        font-style: italic;
+    }
+
+    .selection-form {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    }
+
+    .selection-card {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 25px 15px;
+        background-color: #ffffff;
+        border: 2px solid #EAF4FA;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        text-align: center;
+    }
+
+    .selection-card:hover {
+        border-color: #2575A7;
+        background-color: #f8fbfd;
+    }
+
+    .selection-card.selected {
+        border-color: #2575A7;
+        background-color: #EAF4FA;
+    }
+
+    .selection-card.correct {
+        border-color: #4CAF50;
+        background-color: #e8f5e9;
+    }
+
+    .selection-card.incorrect {
+        border-color: #f44336;
+        background-color: #ffebee;
+    }
+
+    .selection-card input[type="radio"] {
+        display: none;
+    }
+
+    .card-text {
+        font-size: 18px;
+        font-weight: 500;
+        color: #333;
+    }
+
+    .feedback {
+        padding: 15px;
+        border-radius: 10px;
+        text-align: center;
+    }
+
+    .feedback.correct {
+        background-color: #e8f5e9;
+        color: #2e7d32;
+    }
+
+    .feedback.incorrect {
+        background-color: #ffebee;
+        color: #c62828;
+    }
+
+    .lesson-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+    }
+
+    .lesson-buttons .btn {
+        min-width: 150px;
+        padding: 12px 30px;
+        font-size: 16px;
+    }
+</style>
+{% endblock %}
