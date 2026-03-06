@@ -16,10 +16,15 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from lessons import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('accounts/', include('allauth.urls')),
+
+    path('accounts/', include('allauth.urls')), 
     path('vocab/', include('vocab.urls')),
     path('', include('users.urls')),  # Users app includes dashboard
+    path('lesson/input/', views.lesson_input, name="lesson_input"),
+    path('lesson/select/', views.lesson_select, name="lesson_select"),
+
 ]
