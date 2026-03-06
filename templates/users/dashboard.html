@@ -1,20 +1,66 @@
 {% extends "base.html" %}
-
-{% block title %}Dashboard - Sprach Lernen{% endblock %}
+{% load static %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-8 text-center">
-        <div class="card shadow-sm border-0 p-5">
-            <h1 class="display-4 mb-4">Welcome, {{ user.first_name|default:user.username }}!</h1>
-            <p class="lead text-muted mb-4">
-                We're glad to see you again. Ready for some language learning today?
-            </p>
-            <div class="d-grid gap-2 d-md-flex justify-content-md-center">
-                <a href="/" class="btn btn-primary btn-lg px-4">Start Learning</a>
-                <a href="{% url 'account_logout' %}" class="btn btn-outline-secondary btn-lg px-4">Logout</a>
+<div class="dashboard-container">
+    <h1>Dashboard</h1>
+
+    <!-- Statistiken -->
+    <div class="stats-section">
+        <div class="stat-card">
+            <div class="circle-stat">
+                <svg viewBox="0 0 150 150">
+                    <circle class="bg" cx="75" cy="75" r="60"></circle>
+                    <circle class="progress" cx="75" cy="75" r="45"
+                            style="stroke-dashoffset: calc(283 - (283 * {{ words_today|default:0 }}) / {{ words_goal|default:1 }});">
+                    </circle>
+                </svg>
+                <div class="stat-number">{{ words_today|default:0 }}/{{ words_goal|default:0 }}</div>
             </div>
+            <h3 class="stat-label">Learned today</h3>
         </div>
+
+        <div class="stat-card">
+            <div class="circle-stat">
+                <svg viewBox="0 0 150 150">
+                    <circle class="bg" cx="75" cy="75" r="60"></circle>
+                    <circle class="progress lists" cx="75" cy="75" r="45"
+                            style="stroke-dashoffset: calc(283 - (283 * {{ lists_learned|default:0 }}) / {{ lists_total|default:1 }});">
+                    </circle>
+                </svg>
+                <div class="stat-number">{{ lists_learned|default:0 }}/{{ lists_total|default:0 }}</div>
+            </div>
+            <h3 class="stat-label">Learned lists</h3>
+        </div>
+    </div>
+
+    <!-- Gestartete Listen -->
+    <h2>Active lists</h2>
+    <h3>Choose a list to learn</h3>
+
+    <div class="lists-grid">
+        {% for list in started_lists %}
+            <div class="list-card">
+                <h3>
+                    {{ list.name }}
+                    {% if list.is_completed %}
+                        <span class="badge bg-success">Fertig</span>
+                    {% endif %}
+                </h3>
+
+                <p>{{ list.learned_words }} / {{ list.total_words }} gelernt</p>
+
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: {{ list.progress_percent }}%;"></div>
+                </div>
+
+                <a href="{% url 'list_detail' pk=list.id %}" class="btn-start">
+                    {% if list.is_completed %}Wiederholen{% else %}Start{% endif %}
+                </a>
+            </div>
+        {% empty %}
+            <p>Keine Listen gestartet.</p>
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

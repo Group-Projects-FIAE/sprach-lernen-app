@@ -113,8 +113,7 @@ class SetActiveListView(LoginRequiredMixin, RedirectView):
 
     def post(self, request, *args, **kwargs):
         vocab_list = get_object_or_404(VocabularyList, pk=kwargs['pk'])
-        request.user.active_list = vocab_list
-        request.user.save(update_fields=['active_list'])
+        request.user.active_lists.add(vocab_list)
         messages.success(request, f'"{vocab_list.name}" is now your active list.')
         return super().post(request, *args, **kwargs)
 
@@ -127,9 +126,8 @@ class DeleteListView(LoginRequiredMixin, DeleteView):
 
     def delete(self, request, *args, **kwargs):
         vocab_list = self.get_object()
-        if request.user.active_list == vocab_list:
-            request.user.active_list = None
-            request.user.save(update_fields=['active_list'])
+        if request.user.active_lists.filter(pk=vocab_list.pk).exists():
+            request.user.active_lists.remove(vocab_list)
         messages.success(self.request, 'List deleted.')
         return super().delete(request, *args, **kwargs)
 
