@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Lesson - E-lerno{% endblock %}
+{% block title %}Multiple Choice Lesson{% endblock %}
 
 {% block content %}
 <div class="lesson-container">
@@ -20,8 +20,10 @@
 
     <!-- Word to translate -->
     <div class="word-display">
-        <h1>{{ word.german }}</h1>
-        <p class="word-hint">{{ word.hint }}</p>
+        <h1>{{ word.word }}</h1>
+        {% if word.example %}
+        <p class="word-hint">{{ word.example }}</p>
+        {% endif %}
     </div>
 
     <!-- Selection form -->
@@ -31,29 +33,29 @@
         <!-- Four selection cards -->
         <div class="cards-grid">
             {% for option in options %}
-            <label class="selection-card {% if selected == option.id %}selected{% endif %} {% if feedback and option.id == correct_id %}correct{% endif %} {% if feedback and selected == option.id and selected != correct_id %}incorrect{% endif %}">
-                <input type="radio" name="answer" value="{{ option.id }}" {% if selected == option.id %}checked{% endif %}>
+            <label class="selection-card
+                {% if selected == forloop.counter0 %}selected{% endif %}
+                {% if checked and option.correct %}correct{% endif %}
+                {% if checked and selected == forloop.counter0 and not option.correct %}incorrect{% endif %}
+            ">
+                <input type="radio" name="answer" value="{{ forloop.counter0 }}" {% if selected == forloop.counter0 %}checked{% endif %} {% if checked %}disabled{% endif %}>
                 <span class="card-text">{{ option.text }}</span>
             </label>
             {% endfor %}
         </div>
 
-        <!-- Feedback message -->
-        {% if feedback %}
-        <div class="feedback {{ feedback_class }}">
-            <p>{{ feedback }}</p>
-        </div>
+        {% if not checked %}
+            <div class="lesson-buttons mt-3">
+                <button type="submit" name="action" value="check" class="btn btn-save">Check</button>
+                <button type="submit" name="action" value="skip" class="btn btn-cancel">Skip</button>
+            </div>
+        {% else %}
+            <div class="feedback {{ feedback_class }} mt-2">{{ feedback }}</div>
+            <div class="lesson-buttons mt-3">
+        <button type="submit" name="action" value="next" class="btn btn-save">Next</button>
+    </div>
         {% endif %}
 
-        <!-- Buttons -->
-        <div class="lesson-buttons">
-            <button type="submit" name="action" value="check" class="btn btn-save">
-                Prüfen
-            </button>
-            <button type="submit" name="action" value="skip" class="btn btn-cancel">
-                Überspringen
-            </button>
-        </div>
     </form>
 </div>
 

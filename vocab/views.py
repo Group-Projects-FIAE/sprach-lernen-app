@@ -1,4 +1,4 @@
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
 from django.urls import reverse_lazy, reverse
@@ -6,6 +6,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Subquery, OuterRef, IntegerField, Value
 from django.db.models.functions import Coalesce
 from .models import LanguageLevel, VocabularyList, Word, Progress
+from django.views import View
+
 
 class VocabListView(LoginRequiredMixin, ListView):
     model = VocabularyList
@@ -149,3 +151,17 @@ class VocabularyView(LoginRequiredMixin, ListView):
         context['current_level'] = self.request.GET.get('level')
         return context
 
+
+class StartLessonView(LoginRequiredMixin, View):
+    def post(self, request, pk, mode):
+        vocab_list = get_object_or_404(VocabularyList, pk=pk)
+
+        if vocab_list not in request.user.active_lists.all():
+            request.user.active_lists.add(vocab_list)
+
+        if mode == "input":
+            return redirect("lesson_input", pk=pk)
+        elif mode == "select":
+            return redirect("lesson_select", pk=pk)
+        else:
+            return redirect("vocab_lists")

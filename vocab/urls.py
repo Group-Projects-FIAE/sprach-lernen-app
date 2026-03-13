@@ -8,4 +8,5 @@ urlpatterns = [
     path('lists/<int:pk>/activate/', views.SetActiveListView.as_view(), name='set_active_list'),
     path('lists/<int:pk>/delete/', views.DeleteListView.as_view(), name='delete_list'),
     path('vocabulary/', views.VocabularyView.as_view(), name='vocabulary'),
+    path('lists/<int:pk>/start/<str:mode>/', views.StartLessonView.as_view(), name='set_active_list_and_start'),
 ]
