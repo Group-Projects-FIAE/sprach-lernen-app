@@ -93,6 +93,8 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'users.context_processors.socialaccount_providers',
+
+                'vocab.context_processors.nav_lists',
             ],
         },
     },

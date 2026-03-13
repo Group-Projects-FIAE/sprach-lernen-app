@@ -24,17 +24,43 @@
             <div class="d-flex flex-row align-items-center">
                 <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
                 {% if 1 %}
-                    <div class="dropdown p-2">
-                        <!--correct link to the lists view-->
-                      <a class="navbar-btn dropdown-toggle" href="vocab/lists.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <div class="dropdown p-2">
+                    <a class="navbar-btn dropdown-toggle"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown"
+                       aria-expanded="false">
                         Lists
-                      </a>
-                        <!--generate dropdown items from existing in the db lists-->
-                      <ul class="dropdown-menu">
-                          <!--correct link to the list-->
-                        <li><a class="dropdown-item" href="vocab/list_detail.html">Basic B1</a></li>
-                      </ul>
-                    </div>
+                    </a>
+    
+                    <ul class="dropdown-menu">
+    
+                        <!-- System lists -->
+                        {% for list in system_lists %}
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'list_detail' list.id %}">
+                                {{ list.name }} ({{ list.level.code }})
+                            </a>
+                        </li>
+                        {% endfor %}
+    
+                        {% if custom_lists %}
+                        <li><hr class="dropdown-divider"></li>
+    
+                        <!-- Custom lists -->
+                        {% for list in custom_lists %}
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'list_detail' list.id %}">
+                                {{ list.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+    
+                    </ul>
+                </div>
                     <!--correct link to the profile view-->
                     <div class="p-2"><a class="navbar-btn" href="account/profile.html">Profile</a></div>
                     <!--correct link to the logout view-->
