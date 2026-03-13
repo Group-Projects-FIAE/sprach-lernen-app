@@ -1,4 +1,3 @@
-import random
 from datetime import timedelta
 
 from django.utils import timezone
@@ -18,7 +17,6 @@ class LessonService:
         today = timezone.localdate()
         words = self.vocab_list.words.all().order_by('word')
 
-        # Виключаємо вивчені слова (повтор через 2 тижні)
         return [
             w for w in words
             if not Progress.objects.filter(

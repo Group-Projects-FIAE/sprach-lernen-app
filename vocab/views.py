@@ -108,16 +108,6 @@ class CreateListView(LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('list_detail', kwargs={'pk': self.object.pk})
 
-class SetActiveListView(LoginRequiredMixin, RedirectView):
-    permanent = False
-    query_string = True
-    pattern_name = 'list_detail'
-
-    def post(self, request, *args, **kwargs):
-        vocab_list = get_object_or_404(VocabularyList, pk=kwargs['pk'])
-        request.user.active_lists.add(vocab_list)
-        messages.success(request, f'"{vocab_list.name}" is now your active list.')
-        return super().post(request, *args, **kwargs)
 
 class DeleteListView(LoginRequiredMixin, DeleteView):
     model = VocabularyList

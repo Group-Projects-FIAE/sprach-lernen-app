@@ -100,7 +100,6 @@ def lesson_select(request, pk):
     if not word:
         return render(request, "lessons/finished.html")
 
-    # отримуємо фіксований порядок варіантів
     if request.method == "GET":
         options = service.get_options(word)
         request.session[f"options_{current_index}"] = options  # зберігаємо в сесії
@@ -129,10 +128,8 @@ def lesson_select(request, pk):
                 feedback_class = "incorrect"
                 service.update_progress(word, False)
         elif action == "skip":
-            # користувач пропускає слово
             return redirect(f"{request.path}?word={current_index + 1}")
         elif action == "next":
-            # перейти до наступного слова
             return redirect(f"{request.path}?word={current_index + 1}")
 
     context = {
