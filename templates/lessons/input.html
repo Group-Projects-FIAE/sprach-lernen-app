@@ -20,42 +20,47 @@
 
     <!-- Word to translate -->
     <div class="word-display">
-        <h1>{{ word.german }}</h1>
+        <h1>{{ word.word }}</h1>
     </div>
 
-    <!-- Input form -->
-    <form method="post" class="answer-form">
-        {% csrf_token %}
-        <div class="input-group">
-            <label for="answer-input" class="visually-hidden">Your answer</label>
-            <input type="text"
-                   id="answer-input"
-                   name="answer"
-                   class="answer-input"
-                   placeholder="Your answer..."
-                   autocomplete="off"
-                   autofocus>
-        </div>
+   <form method="post" class="answer-form">
+    {% csrf_token %}
 
-        <!-- Feedback message -->
+    <input type="hidden" name="word_index" value="{{ current_word|add:'-1' }}">
+
+    {% if not checked or feedback_class == 'correct' %}
+    <div class="input-group">
+        <input type="text"
+               name="answer"
+               class="answer-input"
+               placeholder="Your answer..."
+               autocomplete="off"
+               {% if checked %}disabled{% endif %}
+               autofocus>
+    </div>
+    {% endif %}
+
+        <!-- Feedback -->
         {% if feedback %}
-        <div class="feedback {{ feedback_class }}">
-            <p>{{ feedback }}</p>
-            {% if correct_answer %}
-            <p class="correct-answer">Correct answer: {{ correct_answer }}</p>
-            {% endif %}
-        </div>
+            <div class="feedback {{ feedback_class }} mt-2">
+                {{ feedback }}
+                {% if correct_answer %}
+                    <p class="correct-answer">Correct answer: {{ correct_answer }}</p>
+                {% endif %}
+            </div>
         {% endif %}
 
         <!-- Buttons -->
-        <div class="lesson-buttons">
-            <button type="submit" name="action" value="check" class="btn btn-save">
-                Answer
-            </button>
-            <button type="submit" name="action" value="skip" class="btn btn-cancel">
-                Skip
-            </button>
-        </div>
+        {% if not checked %}
+            <div class="lesson-buttons mt-3">
+                <button type="submit" name="action" value="check" class="btn btn-save">Check</button>
+                <button type="submit" name="action" value="skip" class="btn btn-cancel">Skip</button>
+            </div>
+        {% else %}
+            <div class="lesson-buttons mt-3">
+                <button type="submit" name="action" value="next" class="btn btn-save">Next</button>
+            </div>
+        {% endif %}
     </form>
 </div>
 

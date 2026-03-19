@@ -25,18 +25,23 @@
                     </circle>
                 </svg>
                 <!-- Logic for progress: words learned today -->
-                <div class="stat-number">{{ learned_count }}</div>
+                <div class="stat-number">{{ learned_count }} / {{ total_words }}</div>
             </div>
         </div>
     </div>
 
 
-    <h2 class="mb-3">Words</h2>
-    <div class="d-flex my-1">
-        <form action="{% url 'set_active_list' vocab_list.pk %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn-start">Start learning</button>
-        </form>
+    <h2 class="mb-3">Start learning:</h2>
+    <div class="d-flex gap-3 my-3">
+        <form action="{% url 'set_active_list_and_start' vocab_list.pk 'input' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-start">Type translation</button>
+    </form>
+
+    <form action="{% url 'set_active_list_and_start' vocab_list.pk 'select' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-start">Multiple choice</button>
+    </form>
         {% if not vocab_list.is_system %}
         <button type="button" class="btn btn-outline text-danger" data-bs-toggle="modal"
             data-bs-target="#deleteModal">
