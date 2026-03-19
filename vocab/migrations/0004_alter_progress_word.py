@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('vocab', '0003_alter_language_id_alter_languagelevel_id_and_more'),
+        ('vocab', '0002_word_example_word_example_translation_word_metadata_and_more'),
     ]
 
     operations = [
