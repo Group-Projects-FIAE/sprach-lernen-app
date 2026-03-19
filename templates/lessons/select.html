@@ -38,7 +38,7 @@
                 {% if checked and option.correct %}correct{% endif %}
                 {% if checked and selected == forloop.counter0 and not option.correct %}incorrect{% endif %}
             ">
-                <input type="radio" name="answer" value="{{ forloop.counter0 }}" {% if selected == forloop.counter0 %}checked{% endif %} {% if checked %}disabled{% endif %}>
+                <input type="radio" name="answer" value="{{ forloop.counter0 }}" {% if selected == forloop.counter0 %}checked{% endif %} {% if checked %}disabled{% endif %} required>
                 <span class="card-text">{{ option.text }}</span>
             </label>
             {% endfor %}
@@ -58,6 +58,27 @@
 
     </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Only attach event listeners if form is not checked
+        {% if not checked %}
+        const optionCards = document.querySelectorAll('.selection-card');
+        const radioInputs = document.querySelectorAll('.selection-card input[type="radio"]');
+
+        radioInputs.forEach(input => {
+            input.addEventListener('change', function() {
+                // Remove 'selected' class from all cards
+                optionCards.forEach(card => card.classList.remove('selected'));
+                // Add 'selected' class to the card containing the checked input
+                if (this.checked) {
+                    this.closest('.selection-card').classList.add('selected');
+                }
+            });
+        });
+        {% endif %}
+    });
+</script>
 
 <style>
     .lesson-container {

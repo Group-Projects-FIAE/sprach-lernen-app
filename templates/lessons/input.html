@@ -28,15 +28,17 @@
 
     <input type="hidden" name="word_index" value="{{ current_word|add:'-1' }}">
 
+    {% if not checked or feedback_class == 'correct' %}
     <div class="input-group">
         <input type="text"
                name="answer"
                class="answer-input"
                placeholder="Your answer..."
                autocomplete="off"
-               {% if checked %}readonly{% endif %}
+               {% if checked %}disabled{% endif %}
                autofocus>
     </div>
+    {% endif %}
 
         <!-- Feedback -->
         {% if feedback %}
