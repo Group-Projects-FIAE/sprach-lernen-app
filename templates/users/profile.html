@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 900px;">
+    <h2 class="mb-4 fw-bold">Profile</h2>
+
+    {% if messages %}
+    <div class="mb-4">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <!-- Left Side: Avatar & Upload -->
+            <div class="col-md-3 text-center mb-4">
+                <div class="avatar-circle mx-auto mb-3" id="avatar-container" style="width: 150px; height: 150px; border-radius: 50%; background-color: #EAF4FA; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                    <img id="profile-preview" src="{% static 'static/img/icon.png' %}" alt="Default Profile Picture" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                </div>
+                <!-- File input hidden, we can trigger it or just use form field -->
+                <div class="d-none">
+                    {{ form.profile }}
+                </div>
+                <button type="button" class="btn btn-primary w-100" disabled>Upload (Disabled)</button>
+            </div>
+
+            <!-- Right Side: Forms -->
+            <div class="col-md-9 ps-md-4" style="border-left: 1px solid #eee;">
+                
+                <!-- Personal Information -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-1">Personal information</h5>
+                    <p class="text-muted small mb-4">Edit your personal Data</p>
+
+                    <div class="mb-3">
+                        <label for="{{ form.first_name.id_for_label }}" class="form-label small">{{ form.first_name.label }}</label>
+                        {{ form.first_name }}
+                        {{ form.first_name.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.last_name.id_for_label }}" class="form-label small">{{ form.last_name.label }}</label>
+                        {{ form.last_name }}
+                        {{ form.last_name.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.email.id_for_label }}" class="form-label small">{{ form.email.label }}</label>
+                        {{ form.email }}
+                        {{ form.email.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.new_password.id_for_label }}" class="form-label small">{{ form.new_password.label }}</label>
+                        {{ form.new_password }}
+                        {{ form.new_password.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.repeat_password.id_for_label }}" class="form-label small">{{ form.repeat_password.label }}</label>
+                        {{ form.repeat_password }}
+                        {{ form.repeat_password.errors }}
+                    </div>
+                </div>
+
+                <!-- Learning Preferences -->
+                <div class="mb-5">
+                    <h5 class="fw-bold mb-1">Learning preferences</h5>
+                    <p class="text-muted small mb-4">Edit your learning preferences</p>
+
+                    <div class="mb-3">
+                        <label for="{{ form.mother_tongue.id_for_label }}" class="form-label small">{{ form.mother_tongue.label }}</label>
+                        {{ form.mother_tongue }}
+                        {{ form.mother_tongue.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.language_to_learn.id_for_label }}" class="form-label small">{{ form.language_to_learn.label }}</label>
+                        {{ form.language_to_learn }}
+                        {{ form.language_to_learn.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label for="{{ form.level.id_for_label }}" class="form-label small">{{ form.level.label }}</label>
+                        {{ form.level }}
+                        {{ form.level.errors }}
+                    </div>
+                    <div class="mb-4">
+                        <label for="{{ form.daily_target.id_for_label }}" class="form-label small">{{ form.daily_target.label }}</label>
+                        {{ form.daily_target }}
+                        {{ form.daily_target.errors }}
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="d-flex justify-content-end gap-3 mt-4">
+                    <a href="{% url 'account_logout' %}" class="btn btn-danger px-4 py-2 fw-bold" style="border-radius: 8px;">Sign out</a>
+                    <button type="submit" class="btn btn-primary px-4 py-2 fw-bold" style="border-radius: 8px;">Save</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+<!-- Styling to make forms look like the screenshot (rounded, pale blue border if needed, etc) -->
+<style>
+    .form-control, .form-select {
+        border: 1px solid #EAF4FA;
+        border-radius: 8px;
+        padding: 0.5rem 0.75rem;
+    }
+    .form-control:focus, .form-select:focus {
+        border-color: #A0CBE8;
+        box-shadow: 0 0 0 0.25rem rgba(41, 128, 185, 0.25);
+    }
+    .form-label {
+        margin-bottom: 0.2rem;
+        color: #333;
+    }
+</style>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const inputs = document.querySelectorAll("input[type='text'], input[type='email'], input[type='password'], input[type='number'], select");
+        inputs.forEach(input => {
+            if (!input.classList.contains("form-control") && !input.classList.contains("form-select")) {
+                if (input.tagName === 'SELECT') {
+                    input.classList.add("form-select");
+                } else {
+                    input.classList.add("form-control");
+                }
+            }
+        });
+
+        // Add file input preview
+        const profileInput = document.querySelector("input[name='profile']");
+        const profilePreview = document.getElementById("profile-preview");
+        if (profileInput && profilePreview) {
+            profileInput.addEventListener("change", function(event) {
+                if (event.target.files && event.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        profilePreview.src = e.target.result;
+                        profilePreview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(event.target.files[0]);
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}
