@@ -18,10 +18,16 @@ This is the easiest way to run the import from your terminal.
     ```bash
     source venv/bin/activate
     ```
-3.  **Run the import command**:
+3.  **Run the import commands** for curated lists:
     ```bash
-    python manage.py import_vocab german_words.json
+    python manage.py import_vocab A1.json
+    python manage.py import_vocab A2.json
+    python manage.py import_vocab B1.json
     ```
+
+**Note on Files:**
+- `A1.json`, `A2.json`, `B1.json`: These are the curated, high-quality vocabulary lists categorized by level.
+- `german_words.json`: This is a small test file containing only two words, used primarily for verifying the import script's functionality.
 
 ### Option B: Checking current counts
 To quickly see how many words are in your database without opening PyCharm's database tool:
