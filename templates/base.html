@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     {% block extra_css %}
     <link rel="stylesheet" href="{% static 'static/style.css' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'static/img/favicon.svg' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'static/img/favicon.ico' %}" />
     {% endblock %}
 </head>
 
@@ -23,7 +25,7 @@
             </a>
             <div class="d-flex flex-row align-items-center">
                 <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
-                {% if 1 %}
+                {% if user.is_authenticated %}
                 <div class="dropdown p-2">
                     <a class="navbar-btn dropdown-toggle"
                        href="#"
@@ -62,9 +64,9 @@
                     </ul>
                 </div>
                     <!--correct link to the profile view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/profile.html">Profile</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'users:profile' %}">Profile</a></div>
                     <!--correct link to the logout view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/logout.html">Logout</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'account_logout' %}">Logout</a></div>
                 {% else %}
                     <!--correct link to the login view-->
                     <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>
