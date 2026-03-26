@@ -28,7 +28,7 @@
                 {% if user.is_authenticated %}
                 <div class="btn-group p-2">
                     <button class="btn" >
-                             <a class="btn" href="vocab_lists" role="button">
+                             <a class="btn" href="{% url 'vocab_lists' %}" role="button">
                                 Lists
                           </a>
                     </button>

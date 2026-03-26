@@ -108,6 +108,7 @@
             cursor: pointer;
             font-size: 14px;
             max-width: 200px;
+            height: 45px;
         }
 
         .btn-save {
@@ -123,7 +124,6 @@
 
         .btn-cancel {
             border-radius: 10px;
-            border: 1px solid #2575A7;
             background-color: #EAF4FA;
             color: black;
         }

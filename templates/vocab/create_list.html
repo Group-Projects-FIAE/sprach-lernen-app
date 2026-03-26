@@ -17,11 +17,6 @@
                     <input type="text" name="name" id="id_name" class="form-control" required
                         placeholder="e.g. My Food Words" value="{% if source_list %}{{ source_list.name }} Copy{% endif %}">
                 </div>
-                <div class="mb-3">
-                    <label for="id_name" class="form-label">Details</label>
-                    <input type="text" name="name" id="id_description" class="form-control" required
-                        placeholder="e.g. My Food Words" value="">
-                </div>
                 <div class="mb-0">
                     <label for="id_level" class="form-label">Level</label>
                     <select name="level" id="id_level" class="form-select" required>
@@ -35,10 +30,48 @@
                 </div>
         </div>
 
+        {%if not source_list %}
+            <div class="mt-2">
+                <h5 class="card-title h6 mb-4">Select a system list to pick words from</h5>
+                {% for lst in system_lists %}
+                 <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
+                     <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                        {{ lst.name }}
+                    </div>
+                 </a>
+                {% empty %}
+                <div class="text-center py-4">
+                    <p class="text-muted mb-0">No system lists available.</p>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
         {% if source_list %}
+        <div class="mt-2">
+                <h5 class="card-title h6 mb-4">Select a system list to pick words from</h5>
+                {% for lst in system_lists %}
+                    {% if source_list.name == lst.name %}
+                 <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
+                     <div class="list-item-selected d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                        {{ lst.name }}
+                    </div>
+                 </a>
+                {% else %}
+                <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
+                     <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                        {{ lst.name }}
+                    </div>
+                 </a>
+                {% endif %}
+                {% empty %}
+                <div class="text-center py-4">
+                    <p class="text-muted mb-0">No system lists available.</p>
+                </div>
+                {% endfor %}
+            </div>
         <div class="tbldiv rounded-3 my-3 overflow-scroll">
             <table class="table table-hover"></table>
-                <h5 class="h6 mb-4">Select words from: {{ source_list.name }}</h5>
+                <h5 class="h6 mb-4">Select words from: <span class="fw-bold">{{ source_list.name }}</span></h5>
                 <div class="row g-3">
                     {% for word in source_words %}
                     <div class="col-md-6 col-lg-4">
@@ -55,31 +88,6 @@
                 </div>
         </div>
         {% endif %}
-
-        {% if not source_list %}
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h5 class="card-title h6 mb-4">Select a system list to pick words from</h5>
-                <div class="list-group list-group-flush">
-                    {% for lst in system_lists %}
-                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <div class="d-flex align-items-center gap-3">
-                            <span class="badge bg-light text-primary">{{ lst.level.code }}</span>
-                            <span class="fw-medium">{{ lst.name }}</span>
-                        </div>
-                        <a href="{% url 'create_list' %}?from={{ lst.pk }}"
-                            class="btn-choose">Choose</a>
-                    </div>
-                    {% empty %}
-                    <div class="text-center py-4">
-                        <p class="text-muted mb-0">No system lists available.</p>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
         <div class="d-flex gap-2">
             <button type="submit" class="btn-start">Save</button>
             {% if source_list %}
@@ -94,35 +102,41 @@
 <style>
         .btn-choose {
             display: inline-block;
-            background: #EAF4FA;
+            background: #d0e7f4;
             color: black;
             padding: 10px 45px;
-            border-style: 2px solid #E9F1F6;
+            border: 2px solid #E9F1F6;
             border-radius: 10px;
             text-decoration: none;
             margin-top: 10px;
-            width: 200px
-            height: 40px;
-        }
-
-        .btn-choose:hover{
-            box-shadow: 0px 4px 8px #D9D9D9;
-        }
-
-        .btn-cancel{
-            display: inline-block;
-            background: #A72525;
-            color: white;
-            padding: 10px 45px;
-            border-radius: 10px;
-            text-decoration: none;
-            margin-top: 10px;
-            width: 200px
+            width: 200px;
             height: 40px;
         }
 
         .btn-cancel:hover{
             box-shadow: 0px 4px 8px #D9D9D9;
+        }
+
+        .list-item{
+            background: #fff;
+            border: 2px solid #EAF4FA;
+            border-radius: 10px;
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
+        }
+
+        .list-item:hover{
+            border: 2px solid #2575A7;
+        }
+
+        .list-item-selected{
+            border-radius: 10px;
+            text-decoration: none;
+            color: black;
+            cursor: pointer;
+            background: #d0e7f4;
+            border: 2px solid #2575A7;
         }
 </style>
 
