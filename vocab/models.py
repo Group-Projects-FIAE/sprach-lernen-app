@@ -38,7 +38,7 @@ class Word(models.Model):
 
 class Progress(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name='progresses')
     date = models.DateField(auto_now_add=True)
     level = models.ForeignKey(LanguageLevel, on_delete=models.SET_NULL, null=True)
     correct_count = models.PositiveIntegerField(default=0)

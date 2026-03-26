@@ -11,6 +11,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:ital,wght@0,100..700;1,100..700&display=swap" rel="stylesheet">
     {% block extra_css %}
     <link rel="stylesheet" href="{% static 'static/style.css' %}">
+    <link rel="icon" type="image/svg+xml" href="{% static 'static/img/favicon.svg' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'static/img/favicon.ico' %}" />
     {% endblock %}
 </head>
 
@@ -23,26 +25,48 @@
             </a>
             <div class="d-flex flex-row align-items-center">
                 <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
-                {% if 1 %}
-                    <div class="btn-group p-2">
-                        <!--correct link to the lists view-->
-                        <button class="btn" >
+                {% if user.is_authenticated %}
+                <div class="btn-group p-2">
+                    <button class="btn" >
                              <a class="btn" href="vocab_lists" role="button">
                                 Lists
                           </a>
-                        </button>
-
-                      <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                    </button>
+                    <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
                             <span class="visually-hidden">Toggle Dropdown</span>
-                      </button>
-                        <!--generate dropdown items from existing in the db lists-->
-                      <ul class="dropdown-menu">
-                          <!--correct link to the list-->
-                        <li><a class="dropdown-item" href="vocab/list_detail.html">Basic B1</a></li>
-                      </ul>
-                    </div>
+                    </button>
+                    <ul class="dropdown-menu">
+
+                        <!-- System lists -->
+                        {% for list in system_lists %}
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'list_detail' list.id %}">
+                                {{ list.name }} ({{ list.level.code }})
+                            </a>
+                        </li>
+                        {% endfor %}
+
+                        {% if custom_lists %}
+                        <li><hr class="dropdown-divider"></li>
+
+                        <!-- Custom lists -->
+                        {% for list in custom_lists %}
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'list_detail' list.id %}">
+                                {{ list.name }}
+                            </a>
+                        </li>
+                        {% endfor %}
+                        {% endif %}
+
+                    </ul>
+                </div>
                     <!--correct link to the profile view-->
-                    <div class="p-2"><a class="navbar-btn" href="profile">Profile</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'users:profile' %}">Profile</a></div>
+                    <!--correct link to the logout view-->
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'account_logout' %}">Logout</a></div>
                 {% else %}
                     <!--correct link to the login view-->
                     <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>
