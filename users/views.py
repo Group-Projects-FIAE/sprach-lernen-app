@@ -14,3 +14,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         context.update(service.get_dashboard_context())
         return context
 
+class ProfileView(LoginRequiredMixin, TemplateView):
+    template_name = 'users/profile.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return context

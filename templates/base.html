@@ -24,11 +24,17 @@
             <div class="d-flex flex-row align-items-center">
                 <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
                 {% if 1 %}
-                    <div class="dropdown p-2">
+                    <div class="btn-group p-2">
                         <!--correct link to the lists view-->
-                      <a class="navbar-btn dropdown-toggle" href="vocab/lists.html" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Lists
-                      </a>
+                        <button class="btn" >
+                             <a class="btn" href="vocab_lists" role="button">
+                                Lists
+                          </a>
+                        </button>
+
+                      <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                      </button>
                         <!--generate dropdown items from existing in the db lists-->
                       <ul class="dropdown-menu">
                           <!--correct link to the list-->
@@ -36,9 +42,7 @@
                       </ul>
                     </div>
                     <!--correct link to the profile view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/profile.html">Profile</a></div>
-                    <!--correct link to the logout view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/logout.html">Logout</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="profile">Profile</a></div>
                 {% else %}
                     <!--correct link to the login view-->
                     <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>

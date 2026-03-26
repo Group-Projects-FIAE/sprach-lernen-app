@@ -3,20 +3,29 @@
 {% block title %}Create a List - Sprach Lernen{% endblock %}
 
 {% block content %}
-<div class="mb-4">
-    <h1 class="h2">Create a List</h1>
-</div>
-
-<form method="post">
+<div class="container">
+    <div class="mb-4">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'vocab_lists' %}">Lists</a></li>
+                <li class="breadcrumb-item active">Create a list</li>
+            </ol>
+        </nav>
+        <h1>Create a List</h1>
+    </div>
+    <form method="post">
     {% csrf_token %}
 
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body">
-            <h5 class="card-title h6 mb-4">List Details</h5>
+    <div class="mb-4">
             <div class="mb-3">
-                <label for="id_name" class="form-label">List Name</label>
+                <label for="id_name" class="form-label">Name</label>
                 <input type="text" name="name" id="id_name" class="form-control" required
                     placeholder="e.g. My Food Words" value="{% if source_list %}{{ source_list.name }} Copy{% endif %}">
+            </div>
+            <div class="mb-3">
+                <label for="id_name" class="form-label">Details</label>
+                <input type="text" name="name" id="id_description" class="form-control" required
+                    placeholder="e.g. My Food Words" value="">
             </div>
             <div class="mb-0">
                 <label for="id_level" class="form-label">Level</label>
@@ -29,13 +38,12 @@
                     {% endfor %}
                 </select>
             </div>
-        </div>
     </div>
 
     {% if source_list %}
-    <div class="card shadow-sm border-0 mb-4">
-        <div class="card-body">
-            <h5 class="card-title h6 mb-4">Select words from: {{ source_list.name }}</h5>
+    <div class="tbldiv rounded-3 my-3 overflow-scroll">
+        <table class="table table-hover"></table>
+            <h5 class="h6 mb-4">Select words from: {{ source_list.name }}</h5>
             <div class="row g-3">
                 {% for word in source_words %}
                 <div class="col-md-6 col-lg-4">
@@ -50,7 +58,6 @@
                 </div>
                 {% endfor %}
             </div>
-        </div>
     </div>
     {% endif %}
 
@@ -66,7 +73,7 @@
                         <span class="fw-medium">{{ lst.name }}</span>
                     </div>
                     <a href="{% url 'create_list' %}?from={{ lst.pk }}"
-                        class="btn btn-outline-primary btn-sm">Choose</a>
+                        class="btn-choose">Choose</a>
                 </div>
                 {% empty %}
                 <div class="text-center py-4">
@@ -79,12 +86,50 @@
     {% endif %}
 
     <div class="d-flex gap-2">
-        <button type="submit" class="btn btn-primary">Save List</button>
+        <button type="submit" class="btn-start">Save</button>
         {% if source_list %}
-        <a href="{% url 'list_detail' source_list.pk %}" class="btn btn-outline-secondary">Cancel</a>
+        <a href="{% url 'list_detail' source_list.pk %}" class="btn-cancel">Cancel</a>
         {% else %}
-        <a href="{% url 'vocab_lists' %}" class="btn btn-outline-secondary">Cancel</a>
+        <a href="{% url 'vocab_lists' %}" class="btn-cancel">Cancel</a>
         {% endif %}
     </div>
 </form>
+</div>
+
+<style>
+        .btn-choose {
+            display: inline-block;
+            background: #EAF4FA;
+            color: black;
+            padding: 10px 45px;
+            border-style: 2px solid #E9F1F6;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+            width: 200px
+            height: 40px;
+        }
+
+        .btn-choose:hover{
+            box-shadow: 0px 4px 8px #D9D9D9;
+        }
+
+        .btn-cancel{
+            display: inline-block;
+            background: #A72525;
+            color: white;
+            padding: 10px 45px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+            width: 200px
+            height: 40px;
+        }
+
+        .btn-cancel:hover{
+            box-shadow: 0px 4px 8px #D9D9D9;
+        }
+</style>
+
+
 {% endblock %}

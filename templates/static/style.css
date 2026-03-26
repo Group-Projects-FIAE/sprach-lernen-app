@@ -241,3 +241,36 @@
         .btn-start:hover {
             box-shadow: 0px 4px 8px #D9D9D9;
         }
+
+        .btn-choose {
+            display: inline-block;
+            background: #EAF4FA;
+            color: black;
+            padding: 10px 45px;
+            border: 2px #E9F1F6;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+            width: 200px
+            height: 40px;
+        }
+
+        .btn-choose:hover{
+            box-shadow: 0px 4px 8px #D9D9D9;
+        }
+
+        .btn-cancel{
+            display: inline-block;
+            background: #A72525;
+            color: white;
+            padding: 10px 45px;
+            border-radius: 10px;
+            text-decoration: none;
+            margin-top: 10px;
+            width: 200px
+            height: 40px;
+        }
+
+        .btn-cancel:hover{
+            box-shadow: 0px 4px 8px #D9D9D9;
+        }
