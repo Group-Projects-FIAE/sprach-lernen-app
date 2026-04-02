@@ -76,5 +76,6 @@ class DashboardService:
             "words_goal": self.get_daily_goal(),
             "lists_learned": lists_summary["lists_learned"],
             "lists_total": lists_summary["lists_total"],
+            "total_points": int(self.user.progress_total),
         }
 

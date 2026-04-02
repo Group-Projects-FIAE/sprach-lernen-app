@@ -32,6 +32,17 @@
             </div>
             <h3 class="stat-label">Learned lists</h3>
         </div>
+
+        <div class="stat-card">
+            <div class="circle-stat">
+                <svg viewBox="0 0 150 150">
+                    <circle class="bg" cx="75" cy="75" r="60"></circle>
+                    <circle class="progress xp" cx="75" cy="75" r="45" style="stroke-dashoffset: 0;"></circle>
+                </svg>
+                <div class="stat-number">{{ total_points|default:0 }}</div>
+            </div>
+            <h3 class="stat-label">Gesamtpunkte (XP)</h3>
+        </div>
     </div>
 
     <!-- Gestartete Listen -->

@@ -49,4 +49,7 @@ class LessonService:
         if correct:
             p.correct_count += 1
             p.last_correct = timezone.localdate()
+            # User points system
+            self.user.progress_total += 1
+            self.user.save()
         p.save()
