@@ -146,6 +146,8 @@
         }
 
         .stat-card {
+            display: flex;
+            flex-direction: column;
             text-align: center;
             padding: 0px 100px 0px 100px;
         }
@@ -170,14 +172,9 @@
         }
 
         .circle-stat .progress {
-            stroke: #4CAF50;
+            stroke: #2575A7;
             stroke-dasharray: 283;
-            stroke-linecap: round;
             transition: stroke-dashoffset 0.5s;
-        }
-
-        .circle-stat .progress.lists {
-            stroke: #2196F3;
         }
 
         .stat-number {
@@ -191,8 +188,6 @@
 
         .stat-label {
             margin-top: 10px;
-
-
         }
 
         .lists-grid {
