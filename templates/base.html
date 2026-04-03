@@ -26,43 +26,44 @@
             <div class="d-flex flex-row align-items-center">
                 <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
                 {% if user.is_authenticated %}
-                <div class="dropdown p-2">
-                    <a class="navbar-btn dropdown-toggle"
-                       href="#"
-                       role="button"
-                       data-bs-toggle="dropdown"
-                       aria-expanded="false">
-                        Lists
-                    </a>
-    
-                    <ul class="dropdown-menu">
-    
-                        <!-- System lists -->
-                        {% for list in system_lists %}
-                        <li>
-                            <a class="dropdown-item"
-                               href="{% url 'list_detail' list.id %}">
-                                {{ list.name }} ({{ list.level.code }})
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'vocabulary' %}">Vocabulary</a></div>
+                    <div class="navbar-btn-group">
+                        <button class="btn" >
+                             <a class="btn" href="{% url 'vocab_lists' %}" role="button">
+                                Lists
                             </a>
-                        </li>
-                        {% endfor %}
-    
-                        {% if custom_lists %}
-                        <li><hr class="dropdown-divider"></li>
-    
-                        <!-- Custom lists -->
-                        {% for list in custom_lists %}
-                        <li>
-                            <a class="dropdown-item"
-                               href="{% url 'list_detail' list.id %}">
-                                {{ list.name }}
-                            </a>
-                        </li>
-                        {% endfor %}
-                        {% endif %}
-    
-                    </ul>
-                </div>
+                        </button>
+                        <button type="button" class="btn dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu">
+
+                            <!-- System lists -->
+                            {% for list in system_lists %}
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{% url 'list_detail' list.id %}">
+                                    {{ list.name }} ({{ list.level.code }})
+                                </a>
+                            </li>
+                            {% endfor %}
+
+                            {% if custom_lists %}
+                            <li><hr class="dropdown-divider"></li>
+
+                            <!-- Custom lists -->
+                            {% for list in custom_lists %}
+                            <li>
+                                <a class="dropdown-item"
+                                   href="{% url 'list_detail' list.id %}">
+                                    {{ list.name }}
+                                </a>
+                            </li>
+                            {% endfor %}
+                            {% endif %}
+
+                        </ul>
+                    </div>
                     <!--correct link to the profile view-->
                     <div class="p-2"><a class="navbar-btn" href="{% url 'users:profile' %}">Profile</a></div>
                     <!--correct link to the logout view-->

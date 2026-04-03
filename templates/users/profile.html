@@ -4,8 +4,8 @@
 {% block title %}Profile{% endblock %}
 
 {% block content %}
-<div class="container" style="max-width: 900px;">
-    <h2 class="mb-4 fw-bold">Profile</h2>
+<div class="container" >
+    <h2>Profile</h2>
 
     {% if messages %}
     <div class="mb-4">
@@ -30,12 +30,12 @@
                 <div class="d-none">
                     {{ form.profile }}
                 </div>
-                <button type="button" class="btn btn-primary w-100" disabled>Upload (Disabled)</button>
+                <button type="button" class="btn-start" >Upload(x)</button>
             </div>
 
             <!-- Right Side: Forms -->
             <div class="col-md-9 ps-md-4" style="border-left: 1px solid #eee;">
-                
+
                 <!-- Personal Information -->
                 <div class="mb-5">
                     <h5 class="fw-bold mb-1">Personal information</h5>
@@ -97,8 +97,8 @@
 
                 <!-- Actions -->
                 <div class="d-flex justify-content-end gap-3 mt-4">
-                    <a href="{% url 'account_logout' %}" class="btn btn-danger px-4 py-2 fw-bold" style="border-radius: 8px;">Sign out</a>
-                    <button type="submit" class="btn btn-primary px-4 py-2 fw-bold" style="border-radius: 8px;">Save</button>
+                    <a href="{% url 'account_logout' %}" class="btn-cancel">Sign out</a>
+                    <button type="submit" class="btn-start" style="border-radius: 8px;">Save</button>
                 </div>
 
             </div>

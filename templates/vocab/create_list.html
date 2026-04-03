@@ -1,21 +1,19 @@
 {% extends "base.html" %}
 
-{% block title %}Create a List - Sprach Lernen{% endblock %}
+{% block title %}Create a List - E-lerno{% endblock %}
 
 {% block content %}
-<div class="w-100 px-3" style="max-width: 600px;">
+<div class="container">
     <div class="mb-4">
-        <h1 class="h2">Create a List</h1>
+        <h2>Create a List</h2>
     </div>
 
     <form method="post">
         {% csrf_token %}
 
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h5 class="card-title h6 mb-4">List Details</h5>
+        <div class="mb-4">
                 <div class="mb-3">
-                    <label for="id_name" class="form-label">List Name</label>
+                    <label for="id_name" class="form-label">Name</label>
                     <input type="text" name="name" id="id_name" class="form-control" required
                         placeholder="e.g. My Food Words" value="{% if source_list %}{{ source_list.name }} Copy{% endif %}">
                 </div>
@@ -30,63 +28,86 @@
                         {% endfor %}
                     </select>
                 </div>
-            </div>
         </div>
 
-        {% if source_list %}
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
-                <h5 class="card-title h6 mb-4">Select words from: {{ source_list.name }}</h5>
-                <div class="row g-3">
-                    {% for word in source_words %}
-                    <div class="col-md-6 col-lg-4">
-                        <div class="form-check p-3 border rounded-3 h-100">
-                            <input class="form-check-input ms-0 me-2" type="checkbox" name="words" value="{{ word.pk }}"
-                                id="word_{{ word.pk }}" checked>
-                            <label class="form-check-label d-flex flex-column" for="word_{{ word.pk }}">
-                                <span class="fw-bold">{{ word.word }}</span>
-                                <span class="text-muted small">{{ word.translation }}</span>
-                            </label>
-                        </div>
-                    </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </div>
-        {% endif %}
-
-        {% if not source_list %}
-        <div class="card shadow-sm border-0 mb-4">
-            <div class="card-body">
+        {%if not source_list %}
+            <div class="mt-2">
                 <h5 class="card-title h6 mb-4">Select a system list to pick words from</h5>
-                <div class="list-group list-group-flush">
-                    {% for lst in system_lists %}
-                    <div class="list-group-item d-flex justify-content-between align-items-center px-0">
-                        <div class="d-flex align-items-center gap-3">
-                            <span class="badge bg-light text-primary">{{ lst.level.code }}</span>
-                            <span class="fw-medium">{{ lst.name }}</span>
-                        </div>
-                        <a href="{% url 'create_list' %}?from={{ lst.pk }}"
-                            class="btn btn-outline-primary btn-sm">Choose</a>
+                {% for lst in system_lists %}
+                 <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
+                     <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                        {{ lst.name }}
                     </div>
-                    {% empty %}
-                    <div class="text-center py-4">
-                        <p class="text-muted mb-0">No system lists available.</p>
-                    </div>
-                    {% endfor %}
+                 </a>
+                {% empty %}
+                <div class="text-center py-4">
+                    <p class="text-muted mb-0">No system lists available.</p>
                 </div>
+                {% endfor %}
             </div>
-        </div>
         {% endif %}
+        {% if source_list %}
+        <div class="mt-2">
+                <h6 class="card-title mb-4">Select a system list to pick words from</h6>
+                {% for lst in system_lists %}
+                    {% if source_list.name == lst.name %}
+                 <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
+                     <div class="list-item-selected d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                        {{ lst.name }}
+                    </div>
+                 </a>
+                {% else %}
+                <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
+                     <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                        {{ lst.name }}
+                    </div>
+                 </a>
+                {% endif %}
+                {% empty %}
+                <div class="text-center py-4">
+                    <p class="text-muted mb-0">No system lists available.</p>
+                </div>
+                {% endfor %}
+            </div>
 
+        <!--TABLE-->
+        <h6 class="my-2">Select words from: <span class="fw-bold">{{ source_list.name }}</span></h6>
+        <div class="tbldiv rounded-3 my-3 overflow-scroll">
+            <table class="itemstable table-hover">
+                <thead>
+                    <tr>
+                        <th>Selected</th>
+                        <th>Word</th>
+                        <th>Translation</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for word in source_words %}
+                    <tr>
+                        <td><input class="form-check-input ms-0 me-2" type="checkbox" name="words" value="{{ word.pk }}"
+                                id="word_{{ word.pk }}" checked></td>
+                        <td><label for="word_{{ word.pk }}">{{ word.word }}</label></td>
+                        <td>{{ word.translation }}</td>
+                        <td>{{ word.word_type }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+        {% endif %}
         <div class="d-flex gap-2">
-            <button type="submit" class="btn btn-primary">Save List</button>
+            <button type="submit" class="btn-start">Save</button>
             {% if source_list %}
-            <a href="{% url 'list_detail' source_list.pk %}" class="btn btn-outline-secondary">Cancel</a>
+            <a href="{% url 'list_detail' source_list.pk %}" class="btn-cancel">Cancel</a>
             {% else %}
-            <a href="{% url 'vocab_lists' %}" class="btn btn-outline-secondary">Cancel</a>
+            <a href="{% url 'vocab_lists' %}" class="btn-cancel">Cancel</a>
             {% endif %}
         </div>
     </form>
 </div>
+
+
 {% endblock %}

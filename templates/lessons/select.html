@@ -46,13 +46,13 @@
 
         {% if not checked %}
             <div class="lesson-buttons mt-3">
-                <button type="submit" name="action" value="check" class="btn btn-save">Check</button>
+                <button type="submit" name="action" value="check" class="btn btn-start">Check</button>
                 <button type="submit" name="action" value="skip" class="btn btn-cancel">Skip</button>
             </div>
         {% else %}
             <div class="feedback {{ feedback_class }} mt-2">{{ feedback }}</div>
             <div class="lesson-buttons mt-3">
-        <button type="submit" name="action" value="next" class="btn btn-save">Next</button>
+        <button type="submit" name="action" value="next" class="btn-start">Next</button>
     </div>
         {% endif %}
 

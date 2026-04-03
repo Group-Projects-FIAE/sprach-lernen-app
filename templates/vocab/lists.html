@@ -46,13 +46,14 @@
         <div class="lists-grid">
             {% for list in custom_lists %}
             <div class="list-card">
+                <div class="d-flex justify-content-between align-items-center">
                 <h3>{{ list.name }}</h3>
-                <span class="badge bg-light text-black">{{ list.level.code }}</span>
-                <span class="progress-value">0/{{ list.words.count }}</span>
-                <span class="text-muted small">learned this month</span>
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: {{ list.progress }}%;"></div>
-                </div>
+                <span>0/{{ list.words.count }} </span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ list.progress }}%;"></div>
+            </div>
                 <a href="{% url 'list_detail' list.pk %}" class="btn-start">Start</a>
             </div>
             {% empty %}
@@ -64,53 +65,4 @@
         </div>
     </section>
 </div>
-
-<style>
-        a.lists-filter {
-            text-align: center;
-            text-decoration: none;
-            width: 70px;
-            color: black;
-            border-radius: 40px;
-            border: 2px solid #EAF4FA;
-            padding: 10px 0px;
-        }
-
-        a.lists-filter:hover {
-            background: #EAF4FA;
-            border: 2px solid  rgba(37, 117, 167, 0.1);
-        }
-
-        a.lists-filter.active {
-            background: #EAF4FA;
-            border: 2px solid #2575A7;
-        }
-</style>
-
-<!-- Level Filter
-<section>
-    <h2 class="h4 mb-4">Your Lists</h2>
-    <div class="card-grid">
-        {% for list in custom_lists %}
-        <div class="vocab-card">
-            <div class="card-header">
-                <h3 class="h5 mb-0">{{ list.name }}</h3>
-                <span class="badge bg-light text-primary">{{ list.level.code }}</span>
-            </div>
-            <div class="d-flex align-items-center gap-3 mb-4">
-                <div class="progress-circle" style="&#45;&#45;p: 0%;">
-                    <span class="progress-value">0/{{ list.words.count }}</span>
-                </div>
-                <span class="text-muted small">not started</span>
-            </div>
-            <a href="{% url 'list_detail' list.pk %}" class="btn btn-primary btn-full">Start</a>
-        </div>
-        {% empty %}
-        <div class="text-center py-5 bg-white rounded-3 border border-dashed">
-            <p class="text-muted mb-3">You haven't created any custom lists yet.</p>
-            <a href="{% url 'create_list' %}" class="btn btn-outline">Create your first list</a>
-        </div>
-        {% endfor %}
-    </div>
-</section>-->
 {% endblock %}
