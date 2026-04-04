@@ -74,9 +74,9 @@
                     </div>
                 {% else %}
                     <!--correct link to the login view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'account_login' %}">Login</a></div>
                     <!--correct link to the signup view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/signup.html">Sign up</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'account_signup' %}">Sign up</a></div>
                 {% endif %}
                     <!--add the logic to switch languages around-->
                     <div class="dropdown">
