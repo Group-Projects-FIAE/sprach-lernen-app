@@ -86,8 +86,12 @@
                 <tbody>
                     {% for word in source_words %}
                     <tr>
-                        <td><input class="form-check-input ms-0 me-2" type="checkbox" name="words" value="{{ word.pk }}"
-                                id="word_{{ word.pk }}" checked></td>
+                        <td>
+                            <input class="form-check-input ms-0 me-2" type="checkbox" name="words" value="{{ word.pk }}"
+                                id="word_{{ word.pk }}"
+                                {% if selected_word_ids and word.pk in selected_word_ids %}checked{% endif %}
+                            >
+                        </td>
                         <td><label for="word_{{ word.pk }}">{{ word.word }}</label></td>
                         <td>{{ word.translation }}</td>
                         <td>{{ word.word_type }}</td>

@@ -90,6 +90,13 @@ class CreateListView(LoginRequiredMixin, CreateView):
                 context['source_words'] = source_list.words.all().order_by('word')
             except VocabularyList.DoesNotExist:
                 pass
+        if self.request.method == 'POST':
+            try:
+                context['selected_word_ids'] = set(int(x) for x in self.request.POST.getlist('words'))
+            except (TypeError, ValueError):
+                context['selected_word_ids'] = set()
+        else:
+            context['selected_word_ids'] = set()
         context['system_lists'] = VocabularyList.objects.filter(is_system=True).select_related('level')
         context['levels'] = LanguageLevel.objects.all().order_by('code')
         return context
