@@ -4,6 +4,7 @@
 {% block content %}
 <div class="dashboard-container">
     <h1>Dashboard</h1>
+    <h3>Gesamtpunkte: <strong>{{ total_points|default:0 }}XP</strong></h3>
 
     <!-- Statistiken -->
     <div class="stats-section">
@@ -11,9 +12,7 @@
             <div class="circle-stat">
                 <svg viewBox="0 0 150 150">
                     <circle class="bg" cx="75" cy="75" r="60"></circle>
-                    <circle class="progress" cx="75" cy="75" r="45"
-                            style="stroke-dashoffset: calc(283 - (283 * {{ words_today|default:0 }}) / {{ words_goal|default:1 }});">
-                    </circle>
+                    <circle class="progress" cx="75" cy="75" r="60" pathLength="100"></circle>
                 </svg>
                 <div class="stat-number">{{ words_today|default:0 }}/{{ words_goal|default:0 }}</div>
             </div>
@@ -24,24 +23,11 @@
             <div class="circle-stat">
                 <svg viewBox="0 0 150 150">
                     <circle class="bg" cx="75" cy="75" r="60"></circle>
-                    <circle class="progress lists" cx="75" cy="75" r="45"
-                            style="stroke-dashoffset: calc(283 - (283 * {{ lists_learned|default:0 }}) / {{ lists_total|default:1 }});">
-                    </circle>
+                    <circle class="progress" cx="75" cy="75" r="60" pathLength="100"></circle>
                 </svg>
-                <div class="stat-number">{{ lists_learned|default:0 }}/{{ lists_total|default:0 }}</div>
+                <div class="stat-number ">{{ lists_learned|default:0 }}/{{ lists_total|default:0 }}</div>
             </div>
             <h3 class="stat-label">Learned lists</h3>
-        </div>
-
-        <div class="stat-card">
-            <div class="circle-stat">
-                <svg viewBox="0 0 150 150">
-                    <circle class="bg" cx="75" cy="75" r="60"></circle>
-                    <circle class="progress xp" cx="75" cy="75" r="45" style="stroke-dashoffset: 0;"></circle>
-                </svg>
-                <div class="stat-number">{{ total_points|default:0 }}</div>
-            </div>
-            <h3 class="stat-label">Gesamtpunkte (XP)</h3>
         </div>
     </div>
 
@@ -65,13 +51,28 @@
                     <div class="progress-fill" style="width: {{ list.progress_percent }}%;"></div>
                 </div>
 
-                <a href="{% url 'list_detail' pk=list.id %}" class="btn-start">
-                    {% if list.is_completed %}Wiederholen{% else %}Start{% endif %}
-                </a>
+                <a href="{% url 'list_detail' pk=list.id %}" class="btn-start">{% if list.is_completed %}Wiederholen{% else %}Start{% endif %}</a>
             </div>
         {% empty %}
             <p>Keine Listen gestartet.</p>
         {% endfor %}
     </div>
 </div>
+<script>
+    // Update circle progress based on data
+    const wordsToday = {{ words_today|default:0 }};
+    const wordsGoal = {{ words_goal|default:0 }};
+    const listsLearned = {{ lists_learned|default:0 }};
+    const listsTotal = {{ lists_total|default:0 }};
+
+    // Words learned today
+    const wordsPercent = wordsGoal > 0 ? (wordsToday / wordsGoal) * 100 : 0;
+    const wordsCircle = document.querySelectorAll('.stat-card')[0].querySelector('.progress');
+    wordsCircle.style.strokeDasharray = `${wordsPercent} 100`;
+
+    // Lists learned
+    const listsPercent = listsTotal > 0 ? (listsLearned / listsTotal) * 100 : 0;
+    const listsCircle = document.querySelectorAll('.stat-card')[1].querySelector('.progress');
+    listsCircle.style.strokeDasharray = `${listsPercent} 100`;
+</script>
 {% endblock %}
