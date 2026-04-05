@@ -62,6 +62,24 @@ class CreateListView(LoginRequiredMixin, CreateView):
     template_name = 'vocab/create_list.html'
     fields = ['name', 'level']
     
+    def get_initial(self):
+
+        initial = super().get_initial()
+        if self.request.method == 'GET':
+            # if a name query param exists, use it as highest priority
+            name_param = self.request.GET.get('name')
+            from_id = self.request.GET.get('from')
+            if name_param:
+                initial['name'] = name_param
+            elif from_id:
+                try:
+                    source_list = VocabularyList.objects.get(pk=from_id)
+                    initial['name'] = f"{source_list.name} Copy"
+                    initial['level'] = source_list.level_id
+                except VocabularyList.DoesNotExist:
+                    pass
+        return initial
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         from_id = self.request.GET.get('from')
@@ -103,7 +121,8 @@ class CreateListView(LoginRequiredMixin, CreateView):
         else:
             messages.success(self.request, f'List "{self.object.name}" created.')
             
-        return HttpResponseRedirect(self.get_success_url())
+        # use the shortcut redirect (already imported) to return an HttpResponseRedirect
+        return redirect(self.get_success_url())
 
     def get_success_url(self):
         return reverse('list_detail', kwargs={'pk': self.object.pk})
