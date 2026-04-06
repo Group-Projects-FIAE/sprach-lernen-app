@@ -112,51 +112,20 @@ def lesson_input(request, pk):
                     next_index = current_index + 1
             except (TypeError, ValueError):
                 next_index = current_index + 1
-            # finish only if we advanced past last item
             if next_index >= total_words:
-                # attempt to rebuild the session word list (some words might have been removed after mastery)
-                rebuilt_ids = [w.pk for w in service.get_words()]
-                if rebuilt_ids:
-                    request.session[session_key] = rebuilt_ids
-                    ids = rebuilt_ids
-                    in_bulk = vocab_list.words.filter(pk__in=ids).in_bulk()
-                    words_now = [in_bulk[i] for i in ids if i in in_bulk]
-                    total_words = len(words_now)
-                    # clamp next_index into new range
-                    if next_index >= total_words:
-                        # still past the end -> finish
-                        if session_key in request.session:
-                            del request.session[session_key]
-                        return render(request, "lessons/finished.html")
-                else:
-                    if session_key in request.session:
-                        del request.session[session_key]
-                    return render(request, "lessons/finished.html")
-            # clamp to valid range
+                if session_key in request.session:
+                    del request.session[session_key]
+                return render(request, "lessons/finished.html")
             if next_index < 0:
                 next_index = 0
             return redirect(f"{request.path}?word={next_index}")
 
         elif action == "next":
-            # Move to next index in the session sequence; finish only when passing last
             next_index = current_index + 1
             if next_index >= total_words:
-                # attempt rebuild before finishing
-                rebuilt_ids = [w.pk for w in service.get_words()]
-                if rebuilt_ids:
-                    request.session[session_key] = rebuilt_ids
-                    ids = rebuilt_ids
-                    in_bulk = vocab_list.words.filter(pk__in=ids).in_bulk()
-                    words_now = [in_bulk[i] for i in ids if i in in_bulk]
-                    total_words = len(words_now)
-                    if next_index >= total_words:
-                        if session_key in request.session:
-                            del request.session[session_key]
-                        return render(request, "lessons/finished.html")
-                else:
-                    if session_key in request.session:
-                        del request.session[session_key]
-                    return render(request, "lessons/finished.html")
+                if session_key in request.session:
+                    del request.session[session_key]
+                return render(request, "lessons/finished.html")
             return redirect(f"{request.path}?word={next_index}")
 
     return render(request, "lessons/input.html", context)
@@ -244,14 +213,6 @@ def lesson_select(request, pk):
                         feedback = "Correct! 🎉"
                         feedback_class = "correct"
                         service.update_progress(word, True)
-                        # ensure session still valid after updating progress (a word might become mastered and be filtered)
-                        rebuilt_ids = [w.pk for w in service.get_words()]
-                        if rebuilt_ids and rebuilt_ids != request.session.get(session_key):
-                            request.session[session_key] = rebuilt_ids
-                            # do not auto-advance; re-render with feedback so user presses Next
-
-                        # mark as checked and keep the selected index so template shows the state
-                        # Build context and render the template so user sees the feedback and can press Next
                         context = {
                             "word": word,
                             "options": options,
