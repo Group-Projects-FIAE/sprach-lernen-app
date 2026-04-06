@@ -42,8 +42,8 @@
                             {% for list in system_lists %}
                             <li>
                                 <a class="dropdown-item"
-                                   href="{% url 'list_detail' list.id %}">
-                                    {{ list.name }} ({{ list.level.code }})
+                                   href="{% url 'list_detail' list.pk %}">
+                                    {{ list.name }}{% if list.level %} ({{ list.level.code }}){% endif %}
                                 </a>
                             </li>
                             {% endfor %}
@@ -55,8 +55,8 @@
                             {% for list in custom_lists %}
                             <li>
                                 <a class="dropdown-item"
-                                   href="{% url 'list_detail' list.id %}">
-                                    {{ list.name }}
+                                   href="{% url 'list_detail' list.pk %}">
+                                     {{ list.name }}
                                 </a>
                             </li>
                             {% endfor %}

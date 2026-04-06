@@ -27,36 +27,51 @@
     </div>
 
     <!-- Selection form -->
-    <form method="post" class="selection-form">
-        {% csrf_token %}
+    <div class="selection-area">
+        <form method="post" class="selection-form">
+            {% csrf_token %}
 
-        <!-- Four selection cards -->
-        <div class="cards-grid">
-            {% for option in options %}
-            <label class="selection-card
-                {% if selected == forloop.counter0 %}selected{% endif %}
-                {% if checked and option.correct %}correct{% endif %}
-                {% if checked and selected == forloop.counter0 and not option.correct %}incorrect{% endif %}
-            ">
-                <input type="radio" name="answer" value="{{ forloop.counter0 }}" {% if selected == forloop.counter0 %}checked{% endif %} {% if checked %}disabled{% endif %} required>
-                <span class="card-text">{{ option.text }}</span>
-            </label>
-            {% endfor %}
-        </div>
-
-        {% if not checked %}
-            <div class="lesson-buttons mt-3">
-                <button type="submit" name="action" value="check" class="btn btn-start">Check</button>
-                <button type="submit" name="action" value="skip" class="btn btn-cancel">Skip</button>
+            <!-- Four selection cards -->
+            <div class="cards-grid">
+                {% for option in options %}
+                <label class="selection-card
+                    {% if selected == forloop.counter0 %}selected{% endif %}
+                    {% if checked and option.correct %}correct{% endif %}
+                    {% if checked and selected == forloop.counter0 and not option.correct %}incorrect{% endif %}
+                ">
+                    <input type="radio" name="answer" value="{{ forloop.counter0 }}" {% if selected == forloop.counter0 %}checked{% endif %} {% if checked %}disabled{% endif %} required>
+                    <span class="card-text">{{ option.text }}</span>
+                </label>
+                {% endfor %}
             </div>
-        {% else %}
-            <div class="feedback {{ feedback_class }} mt-2">{{ feedback }}</div>
-            <div class="lesson-buttons mt-3">
-        <button type="submit" name="action" value="next" class="btn-start">Next</button>
-    </div>
-        {% endif %}
 
-    </form>
+            <!-- Feedback message (shown after checking) -->
+            {% if feedback %}
+            <div class="feedback {{ feedback_class }}" role="status" aria-live="polite" style="margin-top:12px;">
+                {{ feedback }}
+            </div>
+            {% endif %}
+
+            <!-- Actions row beneath cards: Check and Skip in one line -->
+            <div class="selection-actions">
+                <div class="lesson-buttons">
+                    {% if not checked %}
+                        <input type="hidden" name="word_index" value="{{ current_word|add:'-1' }}">
+                        <button type="submit" name="action" value="check" class="btn btn-start">Check</button>
+                    {% else %}
+                        <input type="hidden" name="word_index" value="{{ current_word|add:'-1' }}">
+                        <button type="submit" name="action" value="next" class="btn btn-start">Next</button>
+                    {% endif %}
+                </div>
+                {% if not checked %}
+                <div>
+                    <a class="btn btn-cancel skip-link" href="?word={{ current_word }}">Skip</a>
+                </div>
+                {% endif %}
+            </div>
+
+        </form>
+    </div>
 </div>
 
 <script>
@@ -78,6 +93,13 @@
         });
         {% endif %}
     });
+
+    document.addEventListener('click', function(e){
+        var a = e.target.closest && e.target.closest('a.skip-link');
+        if(!a) return;
+        e.preventDefault();
+        window.location.href = a.href;
+    }, true);
 </script>
 
 <style>
@@ -149,6 +171,7 @@
         display: grid;
         grid-template-columns: repeat(2, 1fr);
         gap: 15px;
+        margin-bottom: 12px; /* separate cards from actions */
     }
 
     .selection-card {
@@ -220,6 +243,16 @@
         min-width: 150px;
         padding: 12px 30px;
         font-size: 16px;
+    }
+
+    .selection-actions { display:flex; gap:12px; align-items:center; justify-content:center; flex-wrap:nowrap; width:100%; margin-top:8px; }
+    /* Ensure buttons inside the actions row stay on one line */
+    .selection-actions .lesson-buttons { margin: 0; display: flex; gap: 12px; align-items: center; }
+    .selection-actions > div { display: flex; align-items: center; }
+    /* Allow buttons to shrink on small screens while preventing text wrap */
+    .selection-actions .btn { white-space: nowrap; min-width: 100px; padding: 8px 16px; }
+    @media (max-width:480px) {
+        .selection-actions .btn { min-width: 80px; padding: 6px 10px; font-size:14px; }
     }
 </style>
 {% endblock %}
