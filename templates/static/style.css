@@ -106,17 +106,19 @@
         }
 
         .btn-start {
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             background: #2575A7;
             color: white;
-            padding: 5px 45px;
+            padding: 8px 20px;
             border-radius: 10px;
-            width: 200px;
-            height: 40px;
-            border:none;
+            border: none;
             text-align: center;
             text-decoration: none;
             vertical-align: middle;
+            white-space: nowrap; /* keep text in one line */
+            width: auto; /* allow automatic width based on content */
         }
 
         .btn-start:hover {
@@ -129,16 +131,18 @@
         }
 
         .btn-cancel{
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
             background: #A72525;
             color: white;
-            padding: 5px 45px;
+            padding: 8px 20px;
             border-radius: 10px;
             text-decoration: none;
-            width: 200px;
-            height: 40px;
-            text-align: center;
+            border: none;
             vertical-align: middle;
+            white-space: nowrap; /* keep text in one line */
+            width: auto; /* allow automatic width based on content */
         }
 
         .btn-cancel:hover{
@@ -301,3 +305,28 @@
             background: #EAF4FA;
             border: 2px solid #2575A7;
         }
+
+        /* Custom logout modal styles */
+        .custom-modal {
+            background: #ffffff; /* pure white background */
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            padding: 18px;
+        }
+
+        .custom-modal .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: none;
+            padding: 8px 20px;
+        }
+
+        /* End of custom modal styles */
+
+
+
+
+        }
+
+

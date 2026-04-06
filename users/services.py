@@ -1,7 +1,10 @@
 from django.utils import timezone
 from vocab.models import VocabularyList, Progress
+from django.db.models import Max
+from datetime import timedelta
 
 LEARNED_THRESHOLD = 5
+LOCK_DAYS = 7
 
 
 class DashboardService:
@@ -17,6 +20,7 @@ class DashboardService:
         for vlist in active_qs:
             total_words = vlist.words.count()
 
+            # mastered: words that reached the learned threshold
             learned_words = Progress.objects.filter(
                 user=self.user,
                 word__vocab_list=vlist,
@@ -30,8 +34,24 @@ class DashboardService:
                 correct_count__lt=LEARNED_THRESHOLD
             ).count()
 
+            # progress percent shows fraction of words learned (mastered)
             progress_percent = round((learned_words / total_words) * 100, 1) if total_words > 0 else 0.0
             is_completed = (0 < total_words == learned_words)
+
+            # determine lock state: if all words learned -> locked until last_learned + LOCK_DAYS
+            is_locked = False
+            unlock_in_days = 0
+            if total_words > 0 and learned_words == total_words:
+                last_learned = Progress.objects.filter(
+                    user=self.user, word__vocab_list=vlist, correct_count__gte=LEARNED_THRESHOLD
+                ).aggregate(max_date=Max('last_correct'))['max_date']
+                if last_learned:
+                    next_available = last_learned + timedelta(days=LOCK_DAYS)
+                    today = timezone.localdate()
+                    delta = (next_available - today).days
+                    if delta > 0:
+                        is_locked = True
+                        unlock_in_days = delta
 
             results.append({
                 "id": vlist.id,
@@ -41,15 +61,19 @@ class DashboardService:
                 "in_progress_words": in_progress_words,
                 "progress_percent": progress_percent,
                 "is_completed": is_completed,
+                "is_locked": is_locked,
+                "unlock_in_days": unlock_in_days,
             })
 
         return results
 
     def get_today_progress(self):
         today = timezone.localdate()
+        # count only those that reached mastery today
         return Progress.objects.filter(
             user=self.user,
-            last_correct=today
+            last_correct=today,
+            correct_count__gte=LEARNED_THRESHOLD,
         ).count()
 
     def get_daily_goal(self):
@@ -78,4 +102,3 @@ class DashboardService:
             "lists_total": lists_summary["lists_total"],
             "total_points": int(self.user.progress_total),
         }
-

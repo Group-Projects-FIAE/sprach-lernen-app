@@ -12,7 +12,7 @@
                 <svg viewBox="0 0 150 150">
                     <circle class="bg" cx="75" cy="75" r="60"></circle>
                     <circle class="progress" cx="75" cy="75" r="45"
-                            style="stroke-dashoffset: calc(283 - (283 * {{ words_today|default:0 }}) / {{ words_goal|default:1 }});">
+                            style="stroke-dashoffset: {{ words_today_offset }};">
                     </circle>
                 </svg>
                 <div class="stat-number">{{ words_today|default:0 }}/{{ words_goal|default:0 }}</div>
@@ -25,7 +25,7 @@
                 <svg viewBox="0 0 150 150">
                     <circle class="bg" cx="75" cy="75" r="60"></circle>
                     <circle class="progress lists" cx="75" cy="75" r="45"
-                            style="stroke-dashoffset: calc(283 - (283 * {{ lists_learned|default:0 }}) / {{ lists_total|default:1 }});">
+                            style="stroke-dashoffset: {{ lists_learned_offset }};">
                     </circle>
                 </svg>
                 <div class="stat-number">{{ lists_learned|default:0 }}/{{ lists_total|default:0 }}</div>
@@ -59,16 +59,19 @@
                     {% endif %}
                 </h3>
 
-                <p>{{ list.learned_words }} / {{ list.total_words }} gelernt</p>
+                <p>{{ list.learned_words }} / {{ list.total_words }} learned</p>
 
                 <div class="progress-bar">
                     <div class="progress-fill" style="width: {{ list.progress_percent }}%;"></div>
                 </div>
 
-                <a href="{% url 'list_detail' pk=list.id %}" class="btn-start">
-                    {% if list.is_completed %}Wiederholen{% else %}Start{% endif %}
-                </a>
-            </div>
+                {% if list.is_locked %}
+                    <button class="btn-start" disabled>Wiederholen</button>
+                    <div class="text-muted small mt-1">Available in {{ list.unlock_in_days }} days</div>
+                {% else %}
+                    <a href="{% url 'list_detail' pk=list.id %}" class="btn-start">{% if list.is_completed %}Wiederholen{% else %}Start{% endif %}</a>
+                {% endif %}
+             </div>
         {% empty %}
             <p>Keine Listen gestartet.</p>
         {% endfor %}

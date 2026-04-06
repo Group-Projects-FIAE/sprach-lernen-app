@@ -14,7 +14,7 @@ class LessonService:
         self.vocab_list = vocab_list
 
     def get_words(self):
-        today = timezone.localdate()
+        # Active words are those that have NOT yet reached the learned threshold
         words = self.vocab_list.words.all().order_by('word')
 
         return [
@@ -23,7 +23,6 @@ class LessonService:
                 user=self.user,
                 word=w,
                 correct_count__gte=LEARNED_THRESHOLD,
-                last_correct__gt=today - timedelta(days=REVIEW_DAYS)
             ).exists()
         ]
 

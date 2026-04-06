@@ -28,17 +28,16 @@
 
     <input type="hidden" name="word_index" value="{{ current_word|add:'-1' }}">
 
-    {% if not checked or feedback_class == 'correct' %}
     <div class="input-group">
         <input type="text"
                name="answer"
                class="answer-input"
                placeholder="Your answer..."
                autocomplete="off"
-               {% if checked %}disabled{% endif %}
+               value="{{ user_answer|default:'' }}"
+               {% if checked %}disabled="disabled"{% endif %}
                autofocus>
     </div>
-    {% endif %}
 
         <!-- Feedback -->
         {% if feedback %}
@@ -54,7 +53,7 @@
         {% if not checked %}
             <div class="lesson-buttons mt-3">
                 <button type="submit" name="action" value="check" class="btn btn-start">Check</button>
-                <button type="submit" name="action" value="skip" class="btn btn-cancel">Skip</button>
+                <a class="btn btn-cancel skip-link" href="?word={{ current_word }}">Skip</a>
             </div>
         {% else %}
             <div class="lesson-buttons mt-3">
@@ -62,7 +61,7 @@
             </div>
         {% endif %}
     </form>
-</div>
+ </div>
 
 <style>
     .lesson-container {
@@ -180,5 +179,19 @@
         padding: 12px 30px;
         font-size: 16px;
     }
+
+    /* Keep check and skip on one line in input lesson */
+    .lesson-buttons { display:flex; gap:12px; align-items:center; justify-content:center; }
+    .lesson-buttons .btn { white-space: nowrap; }
 </style>
+
+<script>
+document.addEventListener('click', function(e){
+    var a = e.target.closest && e.target.closest('a.skip-link');
+    if(!a) return;
+    e.preventDefault();
+    // force navigation (bypass any form validation blocking)
+    window.location.href = a.href;
+}, true);
+</script>
 {% endblock %}

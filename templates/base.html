@@ -42,8 +42,8 @@
                             {% for list in system_lists %}
                             <li>
                                 <a class="dropdown-item"
-                                   href="{% url 'list_detail' list.id %}">
-                                    {{ list.name }} ({{ list.level.code }})
+                                   href="{% url 'list_detail' list.pk %}">
+                                    {{ list.name }}{% if list.level %} ({{ list.level.code }}){% endif %}
                                 </a>
                             </li>
                             {% endfor %}
@@ -55,8 +55,8 @@
                             {% for list in custom_lists %}
                             <li>
                                 <a class="dropdown-item"
-                                   href="{% url 'list_detail' list.id %}">
-                                    {{ list.name }}
+                                   href="{% url 'list_detail' list.pk %}">
+                                     {{ list.name }}
                                 </a>
                             </li>
                             {% endfor %}
@@ -66,13 +66,17 @@
                     </div>
                     <!--correct link to the profile view-->
                     <div class="p-2"><a class="navbar-btn" href="{% url 'users:profile' %}">Profile</a></div>
-                    <!--correct link to the logout view-->
-                    <div class="p-2"><a class="navbar-btn" href="{% url 'account_logout' %}">Logout</a></div>
+                    <div class="p-2">
+                        <!-- Trigger modal using an anchor so it matches other navbar links visually -->
+                        <a class="navbar-btn" role="button" href="#" data-bs-toggle="modal" data-bs-target="#logoutModal" >
+                            Logout
+                        </a>
+                    </div>
                 {% else %}
                     <!--correct link to the login view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/login.html">Login</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'account_login' %}">Login</a></div>
                     <!--correct link to the signup view-->
-                    <div class="p-2"><a class="navbar-btn" href="account/signup.html">Sign up</a></div>
+                    <div class="p-2"><a class="navbar-btn" href="{% url 'account_signup' %}">Sign up</a></div>
                 {% endif %}
                     <!--add the logic to switch languages around-->
                     <div class="dropdown">
@@ -97,6 +101,31 @@
                 </div>
         </div>
     </nav>
+
+    <!-- Custom Logout Modal -->
+    <div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content custom-modal">
+          <!-- Put the logout form directly inside the modal so a normal POST submit works without extra JS -->
+          <form method="post" action="{% url 'account_logout' %}">
+            {% csrf_token %}
+            <div class="modal-header border-0">
+              <h5 class="modal-title" id="logoutModalLabel">Are you sure you want to sign out?</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p>You'll be signed out of your account. Do you want to continue?</p>
+            </div>
+            <div class="modal-footer border-0">
+              <!-- Reuse existing button styles: .btn-cancel and .btn-start -->
+              <button type="button" class="btn-cancel" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" class="btn-start">Sign out</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     {% endblock %}
 
     <main class="d-flex justify-content-center py-5">
