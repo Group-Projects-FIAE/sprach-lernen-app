@@ -97,8 +97,9 @@
 
                 <!-- Actions -->
                 <div class="d-flex justify-content-end gap-3 mt-4">
-                    <a href="{% url 'account_logout' %}" class="btn-cancel">Sign out</a>
-                    <button type="submit" class="btn-start">Save</button>
+                    <!-- Reuse the global logout modal from base.html by triggering it here -->
+                    <button type="button" class="btn-cancel" data-bs-toggle="modal" data-bs-target="#logoutModal">Sign out</button>
+                    <button type="submit" class="btn-start" style="border-radius: 8px;">Save</button>
                 </div>
 
             </div>

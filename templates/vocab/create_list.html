@@ -15,7 +15,8 @@
                 <div class="mb-3">
                     <label for="id_name" class="form-label">Name</label>
                     <input type="text" name="name" id="id_name" class="form-control" required
-                        placeholder="e.g. My Food Words" value="{% if source_list %}{{ source_list.name }} Copy{% endif %}">
+                        placeholder="e.g. My Food Words"
+                        value="{% if form.name.value %}{{ form.name.value }}{% elif source_list %}{{ source_list.name }} Copy{% endif %}">
                 </div>
                 <div class="mb-0">
                     <label for="id_level" class="form-label">Level</label>
@@ -31,14 +32,14 @@
         </div>
 
         {%if not source_list %}
-            <div class="mt-2">
-                <h5 class="card-title h6 mb-4">Select a system list to pick words from</h5>
+            <div class="mt-2 mb-3">
+                <h5 class="card-title h6 mb-3">Select a system list to pick words from</h5>
                 {% for lst in system_lists %}
-                 <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
-                     <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                <a href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none system-list-link" data-list-id="{{ lst.pk }}">
+                    <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
                         {{ lst.name }}
                     </div>
-                 </a>
+                </a>
                 {% empty %}
                 <div class="text-center py-4">
                     <p class="text-muted mb-0">No system lists available.</p>
@@ -57,11 +58,11 @@
                     </div>
                  </a>
                 {% else %}
-                <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" >
-                     <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
-                        {{ lst.name }}
-                    </div>
-                 </a>
+                <a  href="{% url 'create_list' %}?from={{ lst.pk }}" class="text-decoration-none" data-list-id="{{ lst.pk }}">
+                      <div class="list-item d-flex justify-content-between align-items-center p-3 my-2" data-list-id="{{ lst.pk }}">
+                         {{ lst.name }}
+                     </div>
+                  </a>
                 {% endif %}
                 {% empty %}
                 <div class="text-center py-4">
@@ -85,8 +86,12 @@
                 <tbody>
                     {% for word in source_words %}
                     <tr>
-                        <td><input class="form-check-input ms-0 me-2" type="checkbox" name="words" value="{{ word.pk }}"
-                                id="word_{{ word.pk }}" checked></td>
+                        <td>
+                            <input class="form-check-input ms-0 me-2" type="checkbox" name="words" value="{{ word.pk }}"
+                                id="word_{{ word.pk }}"
+                                {% if selected_word_ids and word.pk in selected_word_ids %}checked{% endif %}
+                            >
+                        </td>
                         <td><label for="word_{{ word.pk }}">{{ word.word }}</label></td>
                         <td>{{ word.translation }}</td>
                         <td>{{ word.word_type }}</td>
@@ -109,5 +114,19 @@
     </form>
 </div>
 
+    <script>
+    document.addEventListener('click', function(e){
+        var a = e.target.closest && e.target.closest('a.system-list-link, a[data-list-id]');
+        if (!a) return;
+        var n = document.getElementById('id_name');
+        if (!n) return;
+        var v = n.value.trim();
+        if (!v) return;
+        // only add if name isn't already present
+        if (a.href.indexOf('name=') === -1) {
+            a.href = a.href + (a.href.indexOf('?') === -1 ? '?' : '&') + 'name=' + encodeURIComponent(v);
+        }
+    }, true);
+    </script>
 
 {% endblock %}

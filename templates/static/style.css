@@ -303,3 +303,28 @@
             background: #EAF4FA;
             border: 2px solid #2575A7;
         }
+
+        /* Custom logout modal styles */
+        .custom-modal {
+            background: #ffffff; /* pure white background */
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            padding: 18px;
+        }
+
+        .custom-modal .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            border-top: none;
+            padding: 8px 20px;
+        }
+
+        /* End of custom modal styles */
+
+
+
+
+        }
+
+

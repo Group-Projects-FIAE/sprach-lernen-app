@@ -21,11 +21,11 @@
                 <svg viewBox="0 0 150 150">
                     <circle class="bg" cx="75" cy="75" r="60"></circle>
                     <circle class="progress" cx="75" cy="75" r="45"
-                            style="stroke-dashoffset: calc(283 - (283 * {{ learned_count|default:0 }}) / {{ total_words|default:100 }});">
+                            style="stroke-dashoffset: {{ progress_offset }};">
                     </circle>
                 </svg>
-                <!-- Logic for progress: words learned today -->
-                <div class="stat-number">{{ learned_count }} / {{ total_words }}</div>
+                <!-- show learned summary -->
+                <div class="stat-number">{{ learned_words }} / {{ total_words }}</div>
             </div>
         </div>
     </div>
