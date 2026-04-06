@@ -28,6 +28,7 @@ class VocabListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         level = self.request.GET.get('level')
+        today = timezone.localdate()
         custom_qs = VocabularyList.objects.filter(created_by=self.request.user, is_system=False).select_related('level')
         if level:
             custom_qs = custom_qs.filter(level__code=level)
@@ -42,7 +43,6 @@ class VocabListView(LoginRequiredMixin, ListView):
             # Count only learned words (correct_count >= LEARNED_THRESHOLD)
             learned_all = learned_count
             # Count only those mastered today
-            today = timezone.localdate()
             learned_today = Progress.objects.filter(
                 user=self.request.user,
                 word__vocab_list=vlist,
@@ -59,7 +59,6 @@ class VocabListView(LoginRequiredMixin, ListView):
                 ).aggregate(max_date=Max('last_correct'))['max_date']
                 if last_learned:
                     next_available = last_learned + timedelta(days=LOCK_DAYS)
-                    today = timezone.localdate()
                     delta = (next_available - today).days
                     if delta > 0:
                         is_locked = True
@@ -103,7 +102,6 @@ class VocabListView(LoginRequiredMixin, ListView):
                 ).aggregate(max_date=Max('last_correct'))['max_date']
                 if last_learned:
                     next_available = last_learned + timedelta(days=LOCK_DAYS)
-                    today = timezone.localdate()
                     delta = (next_available - today).days
                     if delta > 0:
                         is_locked = True
