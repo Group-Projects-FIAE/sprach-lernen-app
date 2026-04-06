@@ -5,7 +5,7 @@ Willkommen bei **E-lerno**, einer modernen Full-Stack-Sprachlernanwendung auf Dj
 ## 🛠 Voraussetzungen
 
 Um E-lerno lokal zu betreiben, benötigen Sie:
-- **Python 3.10+**
+- **Python 3.12.3**
 - **pip** (Python Package Installer)
 - Eine aktive Internetverbindung (für den Download der Abhängigkeiten)
 
@@ -16,6 +16,7 @@ Folgen Sie diesen Schritten, um die Anwendung auf Ihrem System einzurichten:
 ### 1. Projekt vorbereiten
 Stellen Sie sicher, dass Sie sich im Stammverzeichnis des Projekts befinden:
 ```bash
+git clone https://github.com/Group-Projects-FIAE/sprach-lernen-app.git
 cd sprach-lernen-app
 ```
 
@@ -52,7 +53,7 @@ python manage.py createsuperuser
 
 ## 📥 Import der Vokabeldaten (WICHTIG)
 
-Die Anwendung startet ohne Standard-Inhalte. Um die Kuratierten Vokabellisten für die verschiedenen Niveaustufen zu laden, führen Sie nacheinander folgende Befehle aus:
+Die Anwendung startet ohne Standard-Inhalte. Um die Kuratierten Vokabellisten für die verschiedenen Niveaustufen zu laden, führen Sie nacheinander folgende Befehle aus (Die JSON-Dateien befinden sich im Root-Verzeichnis):
 
 ```bash
 python manage.py import_vocab A1.json
@@ -70,6 +71,12 @@ python manage.py runserver
 
 Sie können die Anwendung nun im Browser aufrufen unter: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
+## 🐞 Troubleshooting
+
+- Falls "command not found": prüfen Sie, ob die virtuelle Umgebung aktiviert ist
+- Falls Port belegt: python manage.py runserver 8001
+- Falls Module fehlen: pip install -r requirements.txt erneut ausführen
+  
 ## Konfiguration
 
 ### Environment-Variablen (Optional)
