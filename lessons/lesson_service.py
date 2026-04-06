@@ -1,11 +1,23 @@
-from datetime import timedelta
+import random
 
 from django.utils import timezone
 
-from vocab.models import  Progress
+from sprachlernen.constants import LEARNED_THRESHOLD
+from vocab.models import Progress
 
-LEARNED_THRESHOLD = 5
-REVIEW_DAYS = 14
+
+def get_session_key(user_pk, vocab_list_pk):
+    """Generate consistent session key for lesson word list."""
+    return f"lesson_words_{user_pk}_{vocab_list_pk}"
+
+
+def clamp_index(index, total):
+    """Clamp index to valid range [0, total-1]."""
+    if index < 0:
+        return 0
+    if index >= total:
+        return total - 1
+    return index
 
 
 class LessonService:
@@ -26,16 +38,8 @@ class LessonService:
             ).exists()
         ]
 
-    def get_word(self, index):
-        words = self.get_words()
-        total_words = len(words)
-        if index >= total_words:
-            return None, total_words
-        return words[index], total_words
-
     def get_options(self, word):
         all_words = list(self.vocab_list.words.exclude(pk=word.pk))
-        import random
         wrong_words = random.sample(all_words, min(3, len(all_words)))
         options = [{"text": word.translation, "correct": True}] + [
             {"text": w.translation, "correct": False} for w in wrong_words

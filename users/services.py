@@ -1,10 +1,9 @@
 from django.utils import timezone
-from vocab.models import VocabularyList, Progress
 from django.db.models import Max
 from datetime import timedelta
 
-LEARNED_THRESHOLD = 5
-LOCK_DAYS = 7
+from sprachlernen.constants import LEARNED_THRESHOLD, LOCK_DAYS
+from vocab.models import VocabularyList, Progress
 
 
 class DashboardService:

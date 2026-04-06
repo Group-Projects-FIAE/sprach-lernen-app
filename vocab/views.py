@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib import messages
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, RedirectView
+from django.views.generic import ListView, DetailView, CreateView, DeleteView
 from django.urls import reverse_lazy, reverse
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Subquery, OuterRef, IntegerField, Value, Max
@@ -10,8 +10,8 @@ from django.views import View
 from django.utils import timezone
 from datetime import timedelta
 
-LEARNED_THRESHOLD = 5
-LOCK_DAYS = 7
+from sprachlernen.constants import LEARNED_THRESHOLD, LOCK_DAYS
+
 
 class VocabListView(LoginRequiredMixin, ListView):
     model = VocabularyList

@@ -299,18 +299,25 @@
 
         /* Custom logout modal styles */
         .custom-modal {
-            background: #ffffff; /* pure white background */
+            background: #ffffff;
             border-radius: 14px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.12);
             padding: 18px;
         }
 
-        .custom-modal .modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            border-top: none;
+        .logout-buttons {
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            justify-content: flex-start !important;
+            gap: 12px;
             padding: 8px 20px;
+        }
+
+        .logout-buttons .btn-start,
+        .logout-buttons .btn-cancel {
+            min-width: 120px !important;
+            max-width: 150px;
         }
 
         /* End of custom modal styles */

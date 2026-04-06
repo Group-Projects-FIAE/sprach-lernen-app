@@ -1,61 +1,83 @@
 from django.shortcuts import render, get_object_or_404, redirect
 
-from vocab.models import VocabularyList, Word, Progress
-from .lesson_service import LessonService, LEARNED_THRESHOLD
+from vocab.models import VocabularyList
+from .lesson_service import LessonService, get_session_key, clamp_index
+
+
+def _get_lesson_words(request, service, vocab_list, session_key):
+    """
+    Get or initialize the word list for a lesson session.
+    Returns (words_list, total_words) or (None, 0) if no words.
+    """
+    # Initialize session on first GET
+    if request.method != "POST" and session_key not in request.session:
+        request.session[session_key] = [w.pk for w in service.get_words()]
+
+    ids = request.session.get(session_key)
+    if not ids:
+        ids = [w.pk for w in service.get_words()]
+        request.session[session_key] = ids
+
+    # Fetch words preserving order
+    in_bulk = vocab_list.words.filter(pk__in=ids).in_bulk()
+    words_now = [in_bulk[i] for i in ids if i in in_bulk]
+    total_words = len(words_now)
+
+    # Attempt rebuild if empty
+    if total_words == 0:
+        rebuilt_ids = [w.pk for w in service.get_words()]
+        if rebuilt_ids:
+            request.session[session_key] = rebuilt_ids
+            in_bulk = vocab_list.words.filter(pk__in=rebuilt_ids).in_bulk()
+            words_now = [in_bulk[i] for i in rebuilt_ids if i in in_bulk]
+            total_words = len(words_now)
+
+    return words_now, total_words
+
+
+def _handle_lesson_navigation(request, action, current_index, total_words, session_key):
+    """
+    Handle skip/next navigation actions.
+    Returns redirect URL or None if lesson should finish.
+    """
+    if action == "skip":
+        skip_to = request.POST.get('skip_to')
+        try:
+            next_index = int(skip_to) if skip_to else current_index + 1
+        except (TypeError, ValueError):
+            next_index = current_index + 1
+    else:  # next
+        next_index = current_index + 1
+
+    if next_index >= total_words:
+        if session_key in request.session:
+            del request.session[session_key]
+        return None  # Signal to finish lesson
+
+    if next_index < 0:
+        next_index = 0
+    return f"{request.path}?word={next_index}"
 
 
 def lesson_input(request, pk):
     vocab_list = get_object_or_404(VocabularyList, pk=pk)
     service = LessonService(request.user, vocab_list)
+    session_key = get_session_key(request.user.pk, pk)
 
-    # Keep a stable word list for the lesson session in the user's session
-    session_key = f"lesson_words_{request.user.pk}_{pk}"
     if request.method == "POST":
         requested_index = int(request.POST.get("word_index", 0))
     else:
         requested_index = int(request.GET.get("word", 0))
 
-    # initialize session word ids on GET (start of session)
-    if request.method != "POST" and session_key not in request.session:
-        ids = [w.pk for w in service.get_words()]
-        request.session[session_key] = ids
+    words_now, total_words = _get_lesson_words(request, service, vocab_list, session_key)
 
-    ids = request.session.get(session_key)
-    if not ids:
-        # fallback to current active words if session missing or empty
-        ids = [w.pk for w in service.get_words()]
-        # persist rebuilt ids so subsequent requests use updated set
-        request.session[session_key] = ids
-
-    # fetch words preserving original order in ids
-    in_bulk = vocab_list.words.filter(pk__in=ids).in_bulk()
-    words_now = [in_bulk[i] for i in ids if i in in_bulk]
-    total_words = len(words_now)
     if total_words == 0:
-        # try to rebuild from current service.get_words() in case some words were mastered
-        rebuilt_ids = [w.pk for w in service.get_words()]
-        if rebuilt_ids:
-            request.session[session_key] = rebuilt_ids
-            ids = rebuilt_ids
-            in_bulk = vocab_list.words.filter(pk__in=ids).in_bulk()
-            words_now = [in_bulk[i] for i in ids if i in in_bulk]
-            total_words = len(words_now)
-        if total_words == 0:
-            # no active words left — clear session and finish
-            if session_key in request.session:
-                del request.session[session_key]
-            return render(request, "lessons/finished.html")
+        if session_key in request.session:
+            del request.session[session_key]
+        return render(request, "lessons/finished.html")
 
-    # clamp requested index into bounds
-    if requested_index < 0:
-        current_index = 0
-    elif requested_index >= total_words:
-        current_index = total_words - 1
-    else:
-        current_index = requested_index
-
+    current_index = clamp_index(requested_index, total_words)
     word = words_now[current_index]
-    # no upcoming list needed in context (UI removed)
 
     if not word:
         return render(request, "lessons/finished.html")
@@ -102,88 +124,43 @@ def lesson_input(request, pk):
                 context["correct_answer"] = word.translation
                 service.update_progress(word, False)
 
-        elif action == "skip":
-            # allow skipping to a chosen upcoming word via POST 'skip_to'
-            skip_to = request.POST.get('skip_to')
-            try:
-                if skip_to:
-                    next_index = int(skip_to)
-                else:
-                    next_index = current_index + 1
-            except (TypeError, ValueError):
-                next_index = current_index + 1
-            if next_index >= total_words:
-                if session_key in request.session:
-                    del request.session[session_key]
+        elif action in ("skip", "next"):
+            nav_url = _handle_lesson_navigation(request, action, current_index, total_words, session_key)
+            if nav_url is None:
                 return render(request, "lessons/finished.html")
-            if next_index < 0:
-                next_index = 0
-            return redirect(f"{request.path}?word={next_index}")
-
-        elif action == "next":
-            next_index = current_index + 1
-            if next_index >= total_words:
-                if session_key in request.session:
-                    del request.session[session_key]
-                return render(request, "lessons/finished.html")
-            return redirect(f"{request.path}?word={next_index}")
+            return redirect(nav_url)
 
     return render(request, "lessons/input.html", context)
+
 
 def lesson_select(request, pk):
     vocab_list = get_object_or_404(VocabularyList, pk=pk)
     service = LessonService(request.user, vocab_list)
+    session_key = get_session_key(request.user.pk, pk)
 
-    # session key same as above
-    session_key = f"lesson_words_{request.user.pk}_{pk}"
     if request.method == "POST":
         requested_index = int(request.POST.get("word_index", request.GET.get("word", 0)))
     else:
         requested_index = int(request.GET.get("word", 0))
 
-    if request.method != "POST" and session_key not in request.session:
-        request.session[session_key] = [w.pk for w in service.get_words()]
+    words_now, total_words = _get_lesson_words(request, service, vocab_list, session_key)
 
-    ids = request.session.get(session_key) or [w.pk for w in service.get_words()]
-    # persist if we rebuilt from service.get_words()
-    if session_key not in request.session:
-        request.session[session_key] = ids
-    in_bulk = vocab_list.words.filter(pk__in=ids).in_bulk()
-    words_now = [in_bulk[i] for i in ids if i in in_bulk]
-    total_words = len(words_now)
     if total_words == 0:
-        # attempt rebuild from service.get_words()
-        rebuilt_ids = [w.pk for w in service.get_words()]
-        if rebuilt_ids:
-            request.session[session_key] = rebuilt_ids
-            ids = rebuilt_ids
-            in_bulk = vocab_list.words.filter(pk__in=ids).in_bulk()
-            words_now = [in_bulk[i] for i in ids if i in in_bulk]
-            total_words = len(words_now)
-        if total_words == 0:
-            if session_key in request.session:
-                del request.session[session_key]
-            return render(request, "lessons/finished.html")
-    if requested_index < 0:
-        current_index = 0
-    elif requested_index >= total_words:
-        current_index = total_words - 1
-    else:
-        current_index = requested_index
+        if session_key in request.session:
+            del request.session[session_key]
+        return render(request, "lessons/finished.html")
 
+    current_index = clamp_index(requested_index, total_words)
     word = words_now[current_index]
-    # no upcoming list needed in context (UI removed)
 
     if not word:
         return render(request, "lessons/finished.html")
 
     if request.method == "GET":
         options = service.get_options(word)
-        request.session[f"options_{current_index}"] = options  # зберігаємо в сесії
+        request.session[f"options_{current_index}"] = options
     else:
         options = request.session.get(f"options_{current_index}", service.get_options(word))
-
-    correct_id = next(i for i, o in enumerate(options) if o["correct"])
 
     feedback = None
     feedback_class = ""
@@ -216,7 +193,6 @@ def lesson_select(request, pk):
                         context = {
                             "word": word,
                             "options": options,
-                            "correct_id": correct_id,
                             "progress": int((current_index / total_words) * 100),
                             "current_word": current_index + 1,
                             "total_words": total_words,
@@ -230,34 +206,15 @@ def lesson_select(request, pk):
                         feedback = "incorrect"
                         feedback_class = "incorrect"
                         service.update_progress(word, False)
-        elif action == "skip":
-            skip_to = request.POST.get('skip_to')
-            try:
-                if skip_to:
-                    next_index = int(skip_to)
-                else:
-                    next_index = current_index + 1
-            except (TypeError, ValueError):
-                next_index = current_index + 1
-            if next_index >= total_words:
-                if session_key in request.session:
-                    del request.session[session_key]
+        elif action in ("skip", "next"):
+            nav_url = _handle_lesson_navigation(request, action, current_index, total_words, session_key)
+            if nav_url is None:
                 return render(request, "lessons/finished.html")
-            if next_index < 0:
-                next_index = 0
-            return redirect(f"{request.path}?word={next_index}")
-        elif action == "next":
-            next_index = current_index + 1
-            if next_index >= total_words:
-                if session_key in request.session:
-                    del request.session[session_key]
-                return render(request, "lessons/finished.html")
-            return redirect(f"{request.path}?word={next_index}")
+            return redirect(nav_url)
 
     context = {
         "word": word,
         "options": options,
-        "correct_id": correct_id,
         "progress": int((current_index / total_words) * 100),
         "current_word": current_index + 1,
         "total_words": total_words,
