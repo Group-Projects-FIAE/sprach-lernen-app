@@ -45,6 +45,9 @@
             border: 2px solid  rgba(37, 117, 167, 0.1);
 
         }
+         .navbar-btn-group{
+            border: 2px solid  rgba(0, 0, 0, 0.0)
+        }
         .navbar-icon {
             width: 20px;
             height: 20px;

@@ -26,8 +26,7 @@
             <div class="d-flex flex-row align-items-center">
                 <!--create logic if user is authenticated. for now 1- authenticated, 0 - not-->
                 {% if user.is_authenticated %}
-                    <div class="p-2"><a class="navbar-btn" href="{% url 'vocabulary' %}">Vocabulary</a></div>
-                    <div class="navbar-btn-group">
+                <div class="dropdown navbar-btn-group">
                         <button class="btn" >
                              <a class="btn" href="{% url 'vocab_lists' %}" role="button">
                                 Lists
@@ -64,6 +63,7 @@
 
                         </ul>
                     </div>
+                <div class="p-2"><a class="navbar-btn" href="{% url 'vocabulary' %}">Vocabulary</a></div>
                     <!--correct link to the profile view-->
                     <div class="p-2"><a class="navbar-btn" href="{% url 'users:profile' %}">Profile</a></div>
                     <div class="p-2">
