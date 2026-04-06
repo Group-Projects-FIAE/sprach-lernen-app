@@ -161,7 +161,9 @@ class ListDetailView(LoginRequiredMixin, DetailView):
         context['learned_today'] = learned_today
         # compute circle dash offset (same circumference used elsewhere)
         CIRC = 283.0
-        context['progress_offset'] = max(0.0, min(CIRC, CIRC - (CIRC * (progress_percent / 100.0))))
+        # compute using raw fraction to avoid rounding issues
+        fraction = (learned_all / context['total_words']) if context['total_words'] > 0 else 0.0
+        context['progress_offset'] = max(0.0, min(CIRC, CIRC * (1.0 - fraction)))
         context['progress_percent'] = progress_percent
         return context
 

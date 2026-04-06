@@ -27,7 +27,7 @@
 
         h3{
             font-size: 18px;
-            font-weight: light;
+            font-weight: 300;
         }
         .navbar-btn{
             text-decoration: none;
@@ -108,47 +108,32 @@
             margin-top: 28px;
         }
 
-        .btn-start {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: #2575A7;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 10px;
-            border: none;
+         /* unified button sizing for start and cancel */
+        .btn-start, .btn-cancel {
+            display: inline-block;
+            min-width: 200px;
+            min-height: 40px;
+            padding: 0 16px;
+            line-height: 40px;
             text-align: center;
+            color: white;
+            border-radius: 10px;
+            border: 2px solid #000; /* black border to match design */
             text-decoration: none;
+            box-sizing: border-box;
             vertical-align: middle;
-            white-space: nowrap; /* keep text in one line */
-            width: auto; /* allow automatic width based on content */
+            cursor: pointer;
         }
 
-        .btn-start:hover {
-            box-shadow: 0px 4px 8px #D9D9D9;
+        .btn-start { background: #2575A7; }
+        .btn-cancel { background: #A72525; }
+
+        .btn-start:hover, .btn-cancel:hover {
+            box-shadow: 0 4px 8px rgba(0,0,0,0.08);
         }
 
 
         .btn-choose:hover{
-            box-shadow: 0px 4px 8px #D9D9D9;
-        }
-
-        .btn-cancel{
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: #A72525;
-            color: white;
-            padding: 8px 20px;
-            border-radius: 10px;
-            text-decoration: none;
-            border: none;
-            vertical-align: middle;
-            white-space: nowrap; /* keep text in one line */
-            width: auto; /* allow automatic width based on content */
-        }
-
-        .btn-cancel:hover{
             box-shadow: 0px 4px 8px #D9D9D9;
         }
 
@@ -190,14 +175,18 @@
         }
 
         .circle-stat .progress {
-            stroke: #4CAF50;
+            stroke: #2575A7;
             stroke-dasharray: 283;
-            stroke-linecap: round;
             transition: stroke-dashoffset 0.5s;
         }
 
+        /* dashboard stat circles use pathLength=100; limit override to dashboard only */
+        .dashboard-container .stats-section .circle-stat .progress {
+            stroke-dasharray: 100;
+        }
+
         .circle-stat .progress.lists {
-            stroke: #2196F3;
+            stroke: #2575A7;
         }
 
         .stat-number {
@@ -326,10 +315,3 @@
         }
 
         /* End of custom modal styles */
-
-
-
-
-        }
-
-

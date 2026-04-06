@@ -38,9 +38,6 @@
                     <th>
                         Level
                     </th>
-                    <th>
-                        List
-                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -49,8 +46,7 @@
                     <td>{{ word.word }}</td>
                     <td>{{ word.translation }}</td>
                     <td><span class="badge bg-light text-muted fw-normal">{{ word.word_type|default:"-" }}</span></td>
-                    <td><span class="badge bg-light text-primary">{{ word.vocab_list.level.code }}</span></td>
-                    <td>{{ word.vocab_list.name }}</td>
+                    <td><span class="fw-bold">{{ word.vocab_list.level.code }}</span></td>
                 </tr>
                 {% empty %}
                 <tr>

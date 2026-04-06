@@ -52,12 +52,12 @@
         <!-- Buttons -->
         {% if not checked %}
             <div class="lesson-buttons mt-3">
-                <button type="submit" name="action" value="check" class="btn btn-start">Check</button>
-                <a class="btn btn-cancel skip-link" href="?word={{ current_word }}">Skip</a>
+                <button type="submit" name="action" value="check" class="btn-start">Check</button>
+                <a class="btn-cancel skip-link" href="?word={{ current_word }}">Skip</a>
             </div>
         {% else %}
             <div class="lesson-buttons mt-3">
-                <button type="submit" name="action" value="next" class="btn btn-start">Next</button>
+                <button type="submit" name="action" value="next" class="btn-start">Next</button>
             </div>
         {% endif %}
     </form>

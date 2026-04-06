@@ -57,15 +57,15 @@
                 <div class="lesson-buttons">
                     {% if not checked %}
                         <input type="hidden" name="word_index" value="{{ current_word|add:'-1' }}">
-                        <button type="submit" name="action" value="check" class="btn btn-start">Check</button>
+                        <button type="submit" name="action" value="check" class="btn-start">Check</button>
                     {% else %}
                         <input type="hidden" name="word_index" value="{{ current_word|add:'-1' }}">
-                        <button type="submit" name="action" value="next" class="btn btn-start">Next</button>
+                        <button type="submit" name="action" value="next" class="btn-start">Next</button>
                     {% endif %}
                 </div>
                 {% if not checked %}
                 <div>
-                    <a class="btn btn-cancel skip-link" href="?word={{ current_word }}">Skip</a>
+                    <a class="btn-cancel skip-link" href="?word={{ current_word }}">Skip</a>
                 </div>
                 {% endif %}
             </div>

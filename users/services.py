@@ -53,6 +53,10 @@ class DashboardService:
                         is_locked = True
                         unlock_in_days = delta
 
+            # compute SVG circle dash offset using same circumference as other views
+            CIRC = 283.0
+            progress_offset = max(0.0, min(CIRC, CIRC - (CIRC * (progress_percent / 100.0))))
+
             results.append({
                 "id": vlist.id,
                 "name": vlist.name,
@@ -60,6 +64,7 @@ class DashboardService:
                 "learned_words": learned_words,
                 "in_progress_words": in_progress_words,
                 "progress_percent": progress_percent,
+                "progress_offset": progress_offset,
                 "is_completed": is_completed,
                 "is_locked": is_locked,
                 "unlock_in_days": unlock_in_days,
@@ -94,11 +99,28 @@ class DashboardService:
         active_lists = self.get_active_lists_with_progress()
         lists_summary = self.get_lists_summary(active_lists)
 
+        # compute SVG offsets for dashboard summary circles
+        # dashboard circles use pathLength=100 in SVG; compute offsets accordingly
+        CIRC = 100.0
+        words_today = self.get_today_progress()
+        words_goal = self.get_daily_goal() or 0
+        words_percent = round((words_today / words_goal) * 100, 1) if words_goal > 0 else 0.0
+        words_today_offset = max(0.0, min(CIRC, CIRC - (CIRC * (words_percent / 100.0))))
+
+        lists_total = lists_summary["lists_total"]
+        lists_learned = lists_summary["lists_learned"]
+        lists_percent = round((lists_learned / lists_total) * 100, 1) if lists_total > 0 else 0.0
+        lists_learned_offset = max(0.0, min(CIRC, CIRC - (CIRC * (lists_percent / 100.0))))
+
         return {
             "started_lists": active_lists,
-            "words_today": self.get_today_progress(),
-            "words_goal": self.get_daily_goal(),
-            "lists_learned": lists_summary["lists_learned"],
-            "lists_total": lists_summary["lists_total"],
+            "words_today": words_today,
+            "words_goal": words_goal,
+            "words_today_offset": words_today_offset,
+            "words_percent": words_percent,
+            "lists_learned_offset": lists_learned_offset,
+            "lists_learned": lists_learned,
+            "lists_percent": lists_percent,
+            "lists_total": lists_total,
             "total_points": int(self.user.progress_total),
         }

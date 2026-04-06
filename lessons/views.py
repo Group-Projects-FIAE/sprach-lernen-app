@@ -87,7 +87,7 @@ def lesson_input(request, pk):
 
             if user_answer == correct:
                 # Provide immediate feedback and stay on the same page so the user sees the result.
-                context["feedback"] = "Richtig! 🎉"
+                context["feedback"] = "correct 🎉"
                 context["feedback_class"] = "correct"
                 service.update_progress(word, True)
                 # Do NOT redirect here — render the same template with feedback visible.
@@ -97,7 +97,7 @@ def lesson_input(request, pk):
                 return render(request, "lessons/input.html", context)
 
             else:
-                context["feedback"] = "Leider falsch."
+                context["feedback"] = "incorrect"
                 context["feedback_class"] = "incorrect"
                 context["correct_answer"] = word.translation
                 service.update_progress(word, False)
@@ -266,7 +266,7 @@ def lesson_select(request, pk):
                         }
                         return render(request, "lessons/select.html", context)
                     else:
-                        feedback = "Leider falsch."
+                        feedback = "incorrect"
                         feedback_class = "incorrect"
                         service.update_progress(word, False)
         elif action == "skip":

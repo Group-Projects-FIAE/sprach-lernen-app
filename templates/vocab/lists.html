@@ -35,7 +35,7 @@
                         <div class="progress-fill" style="width: {{ list.progress_percent }}%;"></div>
                     </div>
                     {% if list.is_locked %}
-                        <button class="btn-start mt-2" disabled>Wiederholen</button>
+                        <button class="btn-start mt-2" disabled>Repeat</button>
                         <div class="text-muted small mt-1">Available in {{ list.unlock_in_days }} days</div>
                     {% else %}
                         <a href="{% url 'list_detail' list.pk %}" class="btn-start mt-2">Start</a>
@@ -56,7 +56,7 @@
                         <div class="progress-fill" style="width: {{ list.progress }}%;"></div>
                     </div>
                     {% if list.is_locked %}
-                        <button class="btn-start" disabled>Wiederholen</button>
+                        <button class="btn-start" disabled>Repeat</button>
                         <div class="text-muted small mt-1">Available in {{ list.unlock_in_days }} days</div>
                     {% else %}
                         <a href="{% url 'list_detail' list.pk %}" class="btn-start">Start</a>
@@ -84,7 +84,7 @@
                         <div class="progress-fill" style="width: {{ list.progress_percent }}%;"></div>
                     </div>
                     {% if list.is_locked %}
-                        <button class="btn-start mt-2" disabled>Wiederholen</button>
+                        <button class="btn-start mt-2" disabled>Repeat</button>
                         <div class="text-muted small mt-1">Available in {{ list.unlock_in_days }} days</div>
                     {% else %}
                         <a href="{% url 'list_detail' list.pk %}" class="btn-start mt-2">Start</a>
@@ -108,7 +108,7 @@
                         <div class="progress-fill" style="width: {{ list.progress }}%;"></div>
                     </div>
                     {% if list.is_locked %}
-                        <button class="btn-start" disabled>Wiederholen</button>
+                        <button class="btn-start" disabled>Repeat</button>
                         <div class="text-muted small mt-1">Available in {{ list.unlock_in_days }} days</div>
                     {% else %}
                         <a href="{% url 'list_detail' list.pk %}" class="btn-start">Start</a>
