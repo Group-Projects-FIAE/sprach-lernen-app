@@ -51,7 +51,7 @@
                     <div class="progress-fill" style="width: {{ list.progress_percent }}%;"></div>
                 </div>
 
-                <a href="{% url 'list_detail' pk=list.id %}" class="btn-start">{% if list.is_completed %}Wiederholen{% else %}Start{% endif %}</a>
+                <a href="{% url 'list_detail' pk=list.id %}" class="btn-start">{% if list.is_completed %}Repeat{% else %}Start{% endif %}</a>
             </div>
         {% empty %}
             <p>Keine Listen gestartet.</p>
