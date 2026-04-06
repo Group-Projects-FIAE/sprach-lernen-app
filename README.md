@@ -26,7 +26,7 @@ E-lerno is a modern, full-stack language learning application built with Django.
 
 1. **Clone the repository**:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/Group-Projects-FIAE/sprach-lernen-app.git
    cd sprach-lernen-app
    ```
 
