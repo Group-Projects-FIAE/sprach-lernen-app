@@ -3,7 +3,7 @@ from django.db.models import Max
 from datetime import timedelta
 
 from sprachlernen.constants import LEARNED_THRESHOLD, LOCK_DAYS
-from vocab.models import VocabularyList, Progress
+from vocab.models import Progress, VocabularyList
 
 
 class DashboardService:
@@ -83,10 +83,25 @@ class DashboardService:
     def get_daily_goal(self):
         return self.user.daily_target
 
-    def get_lists_summary(self, active_lists):
+    def get_lists_summary(self):
+        # Summary includes only current user's custom lists.
+        visible_lists = VocabularyList.objects.filter(
+            is_system=False,
+            created_by=self.user,
+        ).prefetch_related('words')
 
-        lists_total = VocabularyList.objects.count()
-        lists_learned = sum(1 for item in active_lists if item["is_completed"])
+        lists_total = visible_lists.count()
+        lists_learned = 0
+
+        for vlist in visible_lists:
+            total_words = vlist.words.count()
+            learned_words = Progress.objects.filter(
+                user=self.user,
+                word__vocab_list=vlist,
+                correct_count__gte=LEARNED_THRESHOLD,
+            ).count()
+            if total_words > 0 and learned_words == total_words:
+                lists_learned += 1
 
         return {
             "lists_total": lists_total,
@@ -96,7 +111,7 @@ class DashboardService:
     def get_dashboard_context(self):
 
         active_lists = self.get_active_lists_with_progress()
-        lists_summary = self.get_lists_summary(active_lists)
+        lists_summary = self.get_lists_summary()
 
         # compute SVG offsets for dashboard summary circles
         # dashboard circles use pathLength=100 in SVG; compute offsets accordingly
