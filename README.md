@@ -46,7 +46,13 @@ E-lerno is a modern, full-stack language learning application built with Django.
    python manage.py migrate
    ```
 
-5. **Import initial vocabulary data** (Curated lists):
+5. **Create media folder** (for profile pictures):
+   ```bash
+   mkdir -p media/profiles   # Linux/Mac
+   # On Windows: mkdir media\profiles
+   ```
+
+6. **Import initial vocabulary data** (Curated lists):
    ```bash
    python manage.py import_vocab A1.json
    python manage.py import_vocab A2.json
@@ -54,7 +60,7 @@ E-lerno is a modern, full-stack language learning application built with Django.
    ```
    *Note: `german_words.json` is provided for testing purposes only.*
 
-6. **Start the development server**:
+7. **Start the development server**:
    ```bash
    python manage.py runserver
    ```

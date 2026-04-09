@@ -24,13 +24,17 @@
             <!-- Left Side: Avatar & Upload -->
             <div class="col-md-3 text-center mb-4">
                 <div class="avatar-circle mx-auto mb-3" id="avatar-container" style="width: 150px; height: 150px; border-radius: 50%; background-color: #EAF4FA; overflow: hidden; display: flex; align-items: center; justify-content: center;">
-                    <img id="profile-preview" src="{% static 'static/img/icon.png' %}" alt="Default Profile Picture" style="width: 100%; height: 100%; object-fit: contain; padding: 10px;">
+                    {% if user.profile %}
+                        <img id="profile-preview" src="{{ user.profile.url }}" alt="Profile Picture" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">
+                    {% else %}
+                        <img id="profile-preview" src="{% static 'static/img/icon.png' %}" alt="Default Profile Picture" style="width: 100%; height: 100%; object-fit: contain; padding: 10px; border-radius: 50%;">
+                    {% endif %}
                 </div>
-                <!-- File input hidden, we can trigger it or just use form field -->
+                <!-- File input hidden, triggered by button -->
                 <div class="d-none">
                     {{ form.profile }}
                 </div>
-                <button type="button" class="btn-start" >Upload(x)</button>
+                <button type="button" class="btn-start" onclick="document.querySelector('input[name=profile]').click()">Upload</button>
             </div>
 
             <!-- Right Side: Forms -->
@@ -147,6 +151,9 @@
                     reader.onload = function(e) {
                         profilePreview.src = e.target.result;
                         profilePreview.style.display = 'block';
+                        profilePreview.style.objectFit = 'cover';
+                        profilePreview.style.borderRadius = '50%';
+                        profilePreview.style.padding = '0';
                     }
                     reader.readAsDataURL(event.target.files[0]);
                 }
